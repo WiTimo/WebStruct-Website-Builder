@@ -1,0 +1,17 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    overflow-x: hidden;
+}
+
+:root{
+    --doc-height: 200vh;
+    --main-bg-color: white;
+}
+
+main{
+    height: var(--doc-height);
+    width: 100vw;
+    background-color: var(--main-bg-color);
+}
