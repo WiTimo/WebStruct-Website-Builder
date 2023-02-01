@@ -1,7 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import "./Editor.styles.scss";
+import Popup from "reactjs-popup";
 
 //imports
+import ElementHub from "../ElementHub/ElementHub.component";
 
 
 //const html = `<html><head></head><style>body{display: flex; justify-content: center}</style><body><h1>Test</h1></body></html>`
@@ -9,11 +11,13 @@ import "./Editor.styles.scss";
 
 export default function Editor() {
 
-    const defaultHtml = ["<html>", ["<head>", ["<style>","", "</style>"], "</head>"], ["<body>", ["<h1>", "Test", "</h1>"], "</body>"], "</html>"];
+    const defaultHtml = ["<html>", ["<head>", ["<style>","", "</style>"], "</head>"], ["<body>", [], "</body>"], "</html>"];
     const defaultStyle = ["*", ["margin: 0;", "padding: 0;", "box-sizing: border-box;"], "body", ["background-color: white;"]]
 
     const [html, setHtml] = useState(defaultHtml);
     const [style, setStyle] = useState(defaultStyle);
+    const [elements, setElements] = useState([]);
+    const [currentElement, setCurrentElement] = useState("Headline0");
 
     //create string from array
     let htmlStringEnd = "";
@@ -62,13 +66,36 @@ export default function Editor() {
         };
 
         updateIframe();
-    },[])
+    },[html])
 
+
+    //add elements
+    const addH1 = (content: string, position: Number[]) => {
+        const newHTML = [...html];
+        newHTML[position[0]][position[1]].push([`<h1 id="_${newHTML[position[0]][position[1]].length}">`,content, `</h1>`]);
+        setStyle([...style, `#_${newHTML[position[0]][position[1]].length-1}`, []])
+        setElements([...elements, `Headline${newHTML[position[0]][position[1]].length-1}`])
+        setHtml(newHTML);
+
+    }
+    const addP = (content: string, position: Number[]) => {
+        const newHTML = [...html];
+        newHTML[position[0]][position[1]].push([`<p id="_${newHTML[position[0]][position[1]].length}">`,content, `</p>`]);
+        setStyle([...style, `#_${newHTML[position[0]][position[1]].length-1}`, []])
+        setElements([...elements, `Paragraph${newHTML[position[0]][position[1]].length-1}`])
+        setHtml(newHTML);
+    }
+    
     return(
         <div className="editor-container">
-            <div className="section-1"></div>
+            <div className="section-1">
+                <button className="add-button addH1" onClick={() => addH1("Headline", [2,1])}>Add Headline</button>
+                <button className="add-button addP" onClick={() => addP("Text", [2,1])}>Add Text</button>
+            </div>
             <iframe className="website-showcase-iframe"/>
-            <div className="section-2"></div>
+            <div className="section-2">
+                <ElementHub html={html} style={style} setHtml={setHtml} setStyle={setStyle} element={currentElement.substring(0,currentElement.length-1)} index={currentElement.substring(currentElement.length-1)} />
+            </div>
         </div>
     )
 }
