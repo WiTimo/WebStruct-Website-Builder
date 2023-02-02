@@ -6,9 +6,6 @@ import ElementHub from "../ElementHub/ElementHub.component";
 import ElementSelector from "../ElementSelector/ElementSelector.component";
 
 
-//const html = `<html><head></head><style>body{display: flex; justify-content: center}</style><body><h1>Test</h1></body></html>`
-
-
 export default function Editor() {
 
     const defaultHtml = ["<html>", ["<head>", ["<style>","", "</style>"], "</head>"], ["<body>", [], "</body>"], "</html>"];
@@ -95,7 +92,7 @@ export default function Editor() {
             </div>
             <iframe className="website-showcase-iframe"/>
             <div className="section-2">
-                <ElementHub html={html} style={style} setHtml={setHtml} setStyle={setStyle} element={currentElement[0]} index={currentElement[1]} object={currentElement[2]} objectText={currentElement[2]["text"]}/>
+                <ElementHub html={html} style={style} setHtml={setHtml} setStyle={setStyle} element={currentElement[0]} index={currentElement[1]} object={currentElement[2]}/>
             </div>
         </div>
     )

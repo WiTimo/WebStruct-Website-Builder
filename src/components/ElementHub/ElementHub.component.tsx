@@ -1,13 +1,16 @@
- import Headline from "../Elements/Headline/Headline.element";
+ import { useEffect, useState } from "react";
+import Headline from "../Elements/Headline/Headline.element";
+import Pharagraph from "../Elements/Paragraph/Pharagraph.element";
  
- export default function ElementHub({style, html, setHtml, setStyle, index, element, object, objectText}) {
+ export default function ElementHub({style, html, setHtml, setStyle, index, element, object}) {
+
 
 
     switch(element){
         case "Headline":
-            return <Headline style={style} html={html} setHtml={setHtml} setStyle={setStyle} index={index} isHeadline={true} object={object} objectText={objectText}/>
+            return <Headline style={style} html={html} setHtml={setHtml} setStyle={setStyle} index={index} object={object} text={object["text"]}/>
         case "Paragraph":
-            return <Headline style={style} html={html} setHtml={setHtml} setStyle={setStyle} index={index} isHeadline={false} object={object} objectText={objectText} />
+            return <Pharagraph style={style} html={html} setHtml={setHtml} setStyle={setStyle} index={index} object={object} text={object["text"]} />
         default:
             return <div></div>
     }

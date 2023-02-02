@@ -45,14 +45,13 @@
   }
   &:hover {
     cursor: pointer;
-    background-color: rgb(175, 172, 172);
+    background-color: rgb(0, 0, 0);
     h1 {
       opacity: 1;
       color: var(--background-color);
     }
     svg {
       transform: translateY(30px);
-      fill: black;
     }
   }
 }
