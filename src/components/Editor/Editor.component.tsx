@@ -74,7 +74,7 @@ export default function Editor() {
         const newHTML = [...html];
         newHTML[position[0]][position[1]].push([`<h1 id="_${newHTML[position[0]][position[1]].length}">`,content, `</h1>`]);
         setStyle([...style, `#_${newHTML[position[0]][position[1]].length-1}`, []])
-        setElements([...elements, ["Headline", newHTML[position[0]][position[1]].length-1,{}]])
+        setElements([...elements, ["Headline", newHTML[position[0]][position[1]].length-1,{"text": "Headline"}]])
         setHtml(newHTML);
 
     }
@@ -82,7 +82,7 @@ export default function Editor() {
         const newHTML = [...html];
         newHTML[position[0]][position[1]].push([`<p id="_${newHTML[position[0]][position[1]].length}">`,content, `</p>`]);
         setStyle([...style, `#_${newHTML[position[0]][position[1]].length-1}`, []])
-        setElements([...elements, ["Paragraph", newHTML[position[0]][position[1]].length-1,{}]])
+        setElements([...elements, ["Paragraph", newHTML[position[0]][position[1]].length-1,{"text": "Paragraph"}]])
         setHtml(newHTML);
     }
     
@@ -95,7 +95,7 @@ export default function Editor() {
             </div>
             <iframe className="website-showcase-iframe"/>
             <div className="section-2">
-                <ElementHub html={html} style={style} setHtml={setHtml} setStyle={setStyle} element={currentElement[0]} index={currentElement[1]} />
+                <ElementHub html={html} style={style} setHtml={setHtml} setStyle={setStyle} element={currentElement[0]} index={currentElement[1]} object={currentElement[2]} objectText={currentElement[2]["text"]}/>
             </div>
         </div>
     )

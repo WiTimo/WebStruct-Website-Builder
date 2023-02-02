@@ -2,8 +2,9 @@ import "./ElementSelector.styles.scss";
 
 export default function ElementSelector({setCurrentElement, elements}) {
 
+
     function changeSelectedTarget(index: Number){
-        setCurrentElement([elements[index][0], elements[index][1]]);
+        setCurrentElement([elements[index][0], elements[index][1], elements[index][2]]);
     }
 
     return(

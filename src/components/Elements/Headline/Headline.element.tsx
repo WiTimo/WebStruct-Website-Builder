@@ -1,11 +1,14 @@
 import "./Headline.styles.scss";
-import { useEffect } from "react"
+import { useEffect, useState, useRef } from "react"
 
-export default function Headline({ style, setStyle, html, setHtml, index, isHeadline, elements, setElements }) {
+export default function Headline({ style, setStyle, html, setHtml, index, isHeadline, elements, setElements, object, objectText }) {
 
+
+    const newElement = [isHeadline ? "Headline": "Paragraph", index, object];
     function changeH1Text(e: any) {
         const newHTML = [...html];
         newHTML[2][1][index][1] = e.target.value;
+        newElement[2]["text"] = e.target.value;
         setHtml(newHTML);
     }
 
@@ -21,13 +24,14 @@ export default function Headline({ style, setStyle, html, setHtml, index, isHead
             }
             j++;
         }
+        newElement[2]["align"] = align;
         setStyle(newStyle);
     }
 
     return (
         <div className="elements-container">
             <label htmlFor="id-input">Text: </label>
-            <input className="style-input" id="id-input" name="id-input" placeholder={isHeadline ? "Headline" : "Text"} onChange={(e) => changeH1Text(e)} />
+            <input className="style-input" id="id-input" name="id-input" defaultValue={objectText} onChange={(e) => changeH1Text(e)} />
             <div className="headline-align-container align-container">
                 <button className="align-button align-button-left" onClick={() => changeAlign("left")}>Left</button>
                 <button className="align-button align-button-center" onClick={() => changeAlign("center")}>Center</button>
