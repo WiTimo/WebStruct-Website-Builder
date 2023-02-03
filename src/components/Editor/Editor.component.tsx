@@ -9,7 +9,7 @@ import ElementSelector from "../ElementSelector/ElementSelector.component";
 export default function Editor() {
 
     const defaultHtml = ["<html>", ["<head>", ["<style>","", "</style>"], "</head>"], ["<body>", [], "</body>"], "</html>"];
-    const defaultStyle = ["*", ["margin: 0;", "padding: 0;", "box-sizing: border-box;"], "body", ["background-color: white;"]]
+    const defaultStyle = ["*", ["margin: 0;", "padding: 0;", "box-sizing: border-box;", "overflow-x: hidden;"], "body", ["background-color: white;"]]
 
     const [html, setHtml] = useState(defaultHtml);
     const [style, setStyle] = useState(defaultStyle);
@@ -88,7 +88,7 @@ export default function Editor() {
             <div className="section-1">
                 <button className="add-button addH1" onClick={() => addH1("Headline", [2,1])}>Add Headline</button>
                 <button className="add-button addP" onClick={() => addP("Text", [2,1])}>Add Text</button>
-                <ElementSelector elements={elements} setCurrentElement={setCurrentElement}/>
+                <ElementSelector elements={elements} setCurrentElement={setCurrentElement} object={currentElement[2]}/>
             </div>
             <iframe className="website-showcase-iframe"/>
             <div className="section-2">

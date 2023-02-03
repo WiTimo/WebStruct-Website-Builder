@@ -1,6 +1,6 @@
 import "./ElementSelector.styles.scss";
 
-export default function ElementSelector({setCurrentElement, elements}) {
+export default function ElementSelector({setCurrentElement, elements, object}) {
 
 
     function changeSelectedTarget(index: Number){
