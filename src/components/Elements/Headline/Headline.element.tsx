@@ -14,6 +14,15 @@ import BorderRadius from "../../Styles/BorderRadius.style.component";
 import VerticalAlign from "../../Styles/VerticalAlign.style.component";
 import Absolute from "../../Styles/Absolute.style.component";
 import Margin from "../../Styles/Margin.style.component";
+import Padding from "../../Styles/Padding.style.component";
+import Border from "../../Styles/Border.style.component";
+import Opacity from "../../Styles/Opacity.style.component";
+import ZIndex from "../../Styles/ZIndex.style.component";
+import BoxShadow from "../../Styles/BoxShadow.style.component";
+import Position from "../../Styles/Position.style.component";
+import Overflow from "../../Styles/Overflow.style.component";
+import Cursor from "../../Styles/Cursor.style.component";
+
 
 export default function Headline({ style, setStyle, html, setHtml, index, object, text = "Default" }) {
 
@@ -74,7 +83,9 @@ export default function Headline({ style, setStyle, html, setHtml, index, object
             <BorderRadius object={object} changeStyle={changeStyle}/>
             <Absolute object={object} changeStyle={changeStyle} resetStyle={resetStyle}/>
             <Margin object={object} changeStyle={changeStyle} resetStyle={resetStyle}/>
-            
+            <Padding object={object} changeStyle={changeStyle} resetStyle={resetStyle}/>
+            <Border object={object} changeStyle={changeStyle} resetStyle={resetStyle}/>
+            <Opacity object={object} changeStyle={changeStyle}/>
         </div>
     )
 }

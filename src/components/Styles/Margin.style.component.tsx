@@ -40,7 +40,7 @@ export default function Margin({object, changeStyle, resetStyle}){
                         </select>
                     </div>
                     <div className="margin-right-options">
-                        <label htmlFor="margin-right">X-Axis: </label>
+                        <label htmlFor="margin-right">Right: </label>
                         <input id="margin-right-range" name="margin-right" type="range" value={object["margin-right"] ? object["margin-right"][0] : "0"} onChange={(e) => changeStyle("margin-right", `${e.target.value}`, document.querySelector("#margin-right-unit-dropdown").value, true)} />
                         <input id="margin-right" name="margin-right" value={object["margin-right"] ? object["margin-right"][0] : "0"} onChange={(e) => changeStyle("margin-right", `${e.target.value}`, document.querySelector("#margin-right-unit-dropdown").value, true)} />
                         <select name="margin-right" id="margin-right-unit-dropdown" value={object["margin-right"] ? object["margin-right"][1] : "vw"} onChange={(e) => changeStyle("margin-right", `${document.querySelector("#margin-right").value}`, e.target.value, true)}>
@@ -54,7 +54,7 @@ export default function Margin({object, changeStyle, resetStyle}){
                         </select>
                     </div>
                     <div className="margin-bottom-options">
-                    <label htmlFor="margin-bottom">Y-Axis: </label>
+                    <label htmlFor="margin-bottom">Bottom: </label>
                         <input id="margin-bottom-range" name="top" type="range" value={object["margin-bottom"] ? object["margin-bottom"][0] : "0"} onChange={(e) => changeStyle("margin-bottom", `${e.target.value}`, document.querySelector("#margin-bottom-unit-dropdown").value, true)} />
                         <input id="margin-bottom" name="margin-bottom" value={object["margin-bottom"] ? object["margin-bottom"][0] : "0"} onChange={(e) => changeStyle("margin-bottom", `${e.target.value}`, document.querySelector("#margin-bottom-unit-dropdown").value, true)} />
                         <select name="margin-bottom" id="margin-bottom-unit-dropdown" value={object["margin-bottom"] ? object["margin-bottom"][1] : "vh"} onChange={(e) => changeStyle("margin-bottom", `${document.querySelector("#margin-bottom").value}`, e.target.value, true)}>

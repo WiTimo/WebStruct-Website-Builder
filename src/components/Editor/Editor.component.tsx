@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import "./Editor.styles.scss";
-
+import Draggable from 'react-draggable';
 //imports
 import ElementHub from "../ElementHub/ElementHub.component";
 import ElementSelector from "../ElementSelector/ElementSelector.component";
@@ -85,15 +85,23 @@ export default function Editor() {
     
     return(
         <div className="editor-container">
-            <div className="section-1">
-                <button className="add-button addH1" onClick={() => addH1("Headline", [2,1])}>Add Headline</button>
-                <button className="add-button addP" onClick={() => addP("Text", [2,1])}>Add Text</button>
-                <ElementSelector elements={elements} setCurrentElement={setCurrentElement} object={currentElement[2]}/>
-            </div>
-            <iframe className="website-showcase-iframe"/>
-            <div className="section-2">
-                <ElementHub html={html} style={style} setHtml={setHtml} setStyle={setStyle} element={currentElement[0]} index={currentElement[1]} object={currentElement[2]}/>
-            </div>
+            <Draggable handle=".dragable-object-section-1">
+                <div className="section-1">
+                    <div className="dragable-object dragable-object-section-1"></div>
+                    <button className="add-button addH1" onClick={() => addH1("Headline", [2,1])}>Add Headline</button>
+                    <button className="add-button addP" onClick={() => addP("Text", [2,1])}>Add Text</button>
+                    <ElementSelector elements={elements} setCurrentElement={setCurrentElement} object={currentElement[2]}/>
+                </div>
+            </Draggable>
+            
+            <iframe className="website-showcase-iframe" sandbox="allow-same-origin allow-scripts"/>
+            <Draggable handle=".dragable-object-section-2">
+                <div className="section-2">
+                    <div className="dragable-object dragable-object-section-2"></div>
+                    <ElementHub html={html} style={style} setHtml={setHtml} setStyle={setStyle} element={currentElement[0]} index={currentElement[1]} object={currentElement[2]}/>
+                </div>
+            </Draggable>
+            
         </div>
     )
 }
