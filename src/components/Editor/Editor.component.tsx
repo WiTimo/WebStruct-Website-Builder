@@ -99,13 +99,16 @@ export default function Editor() {
 
         //add event listeners for custom border
         const bottomDot = document.querySelector(".custom-border-bottom-dot");
-        bottomDot?.addEventListener("pointerdown", (e) => {
-            bottomDot?.setPointerCapture(e.pointerId);
-            const element = document.querySelector(`#_${currentElement[1]}`);
-            changeStyle("height", element.getBoundingClientRect().height+2);            
-        })
+        
+        bottomDot?.addEventListener("pointerdown", (e) => {bottomDot.setPointerCapture(e.pointerId); setDotPosition("height", e.pageY); bottomDot?.addEventListener("pointermove", (e) => {setDotPosition("height", e.pageY)}, false);    })
+        bottomDot?.addEventListener("pointerup", () => {bottomDot.removeEventListener("pointermove", (e) => {setDotPosition("height", e.pageY)}, false)}, {once: true});
 
-    },[html,style])
+    },[html])
+
+    function setDotPosition(css:string, position: number){
+        if(css === "height") changeStyle("height", Math.round(position/(window.innerHeight/100)), "vh", true, currentElement[1], currentElement[2])
+        else changeStyle("width", Math.round(position/(window.innerWidth/100)), "vw", true, currentElement[1], currentElement[2]);
+    }
 
 
     useEffect(() => {
@@ -113,39 +116,30 @@ export default function Editor() {
     },[currentElement])
 
 
-    //add elements
-    const addH1 = (content: string, position: number[]) => {
-        const newHTML = [...html];
-        newHTML[position[0]][position[1]].push([`<h1 id="_${newHTML[position[0]][position[1]].length}" class="element ${newHTML[position[0]][position[1]].length}">`,content, `</h1>`]);
-        setStyle([...style, `#_${newHTML[position[0]][position[1]].length-1}`, []])
-        setElements([...elements, ["Headline", newHTML[position[0]][position[1]].length-1,{"text": "Headline"}]])
-        setHtml(newHTML);
+    
 
-    }
-    const addP = (content: string, position: number[]) => {
-        const newHTML = [...html];
-        const HTMLPosition = newHTML[position[0]][position[1]];
-        HTMLPosition.push([`<p id="_${HTMLPosition.length}" class="element">`,content, `</p>`]);
-        setStyle([...style, `#_${HTMLPosition.length-1}`, []])
-        setElements([...elements, ["Paragraph", HTMLPosition.length-1,{"text": "Paragraph"}]])
-        setHtml(newHTML);
-    }
-
-    function changeStyle(css: string, value: string, unit = "", double = false, index: number, newElement: any) {
+    function changeStyle(css: string, value: string, unit = "", double = false, index: number, object: any) {
         const newStyle = [...style];
         const styleIdxArray: string[] = newStyle[newStyle.indexOf(`#_${index}`) + 1];
         if (styleIdxArray.includes(`${css}: ${value}${unit};`)) return;
-        styleIdxArray.push(`${css}: ${value}${unit};`);
-        let j = 0;
+        try{
+            styleIdxArray.push(`${css}: ${value}${unit};`);
+            let j = 0;
         for (let i of styleIdxArray) {
             if (i.includes(`${css}:`) && i !== `${css}: ${value}${unit};`) {
                 styleIdxArray.splice(j, 1)
             }
             j++;
         }
-        if(!double) newElement[2][`${css}`] = value;
-        else newElement[2][`${css}`] = [value, unit];
+        const newElements = [...elements]
+        if(!double) newElements[index][2][`${css}`] = value;
+        else newElements[index][2][`${css}`] = [value, unit];
+        setElements(newElements);
         setStyle(newStyle);
+        } catch (e){
+            return;
+        }
+        
         
         //iframe
         const Iframe = document.querySelector("iframe");
@@ -163,14 +157,14 @@ export default function Editor() {
         }
     }
     
-    function changeText(e: any, index: number, newElement: any) {
+    function changeText(e: any, index: number, object: any) {
         const newHTML = [...html];
         newHTML[2][1][index][1] = e.target.value;
-        newElement[2]["text"] = e.target.value;
+        object["text"] = e.target.value;
         setHtml(newHTML);
     }
 
-    function resetStyle(css: string, double = false, index: number, newElement: any) {
+    function resetStyle(css: string, double = false, index: number, object: any) {
         const newStyle = [...style];
         const styleIdxArray = newStyle[newStyle.indexOf(`#_${index}`) + 1];
         let j = 0;
@@ -180,8 +174,10 @@ export default function Editor() {
             }
             j++;
         }
-        if(!double) newElement[2][`${css}`] = "";
-        else newElement[2][`${css}`] = ["", ""];
+        const newElements = [...elements]
+        if(!double) newElements[index][2][`${css}`] = "";
+        else newElements[index][2][`${css}`] = ["", ""];
+        setElements(newElements);
         setStyle(newStyle);
     }
 
@@ -189,6 +185,28 @@ export default function Editor() {
         const customBorder = document.querySelector(".custom-border");
         if(!customBorder) return;
         customBorder.style.opacity = "0";
+    }
+
+
+
+
+
+
+    //add elements
+    const addH1 = (content: string, position: number[]) => {
+        const newHTML = [...html];
+        newHTML[position[0]][position[1]].push([`<h1 id="_${newHTML[position[0]][position[1]].length}" class="element ${newHTML[position[0]][position[1]].length}">`,content, `</h1>`]);
+        setStyle([...style, `#_${newHTML[position[0]][position[1]].length-1}`, []])
+        setElements([...elements, ["Headline", newHTML[position[0]][position[1]].length-1,{"text": "Headline"}]])
+        setHtml(newHTML);
+    }
+    const addP = (content: string, position: number[]) => {
+        const newHTML = [...html];
+        const HTMLPosition = newHTML[position[0]][position[1]];
+        HTMLPosition.push([`<p id="_${HTMLPosition.length}" class="element">`,content, `</p>`]);
+        setStyle([...style, `#_${HTMLPosition.length-1}`, []])
+        setElements([...elements, ["Paragraph", HTMLPosition.length-1,{"text": "Paragraph"}]])
+        setHtml(newHTML);
     }
     
     return(

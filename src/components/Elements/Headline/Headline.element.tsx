@@ -21,18 +21,17 @@ import Collapsible from "react-collapsible";
 export default function Headline({index, object, text = "Default", changeStyle, resetStyle ,changeText, makeBorderBoxInvisible }) {
 
 
-    const newElement = ["Headline", index, object];
     
     function resetStyleHandler(css: string, double = false) {
-        resetStyle(css, double, index, newElement);
+        resetStyle(css, double, index, object);
     }
 
     function changeStyleHandler( css: string, value: string, unit="", double = false) {
-        changeStyle(css, value, unit, double, index, newElement);
+        changeStyle(css, value, unit, double, index, object);
     }
 
     function changeTextHandler(e: any){
-        changeText(e, index, newElement);
+        changeText(e, index, object);
     }
 
     return (
@@ -70,12 +69,6 @@ export default function Headline({index, object, text = "Default", changeStyle, 
                 <Margin object={object} changeStyle={changeStyleHandler} resetStyle={resetStyleHandler} customBorder={makeBorderBoxInvisible}/>
                 <Padding object={object} changeStyle={changeStyleHandler} resetStyle={resetStyleHandler} customBorder={makeBorderBoxInvisible}/>
             </Collapsible>
-           
-            
-            
-
-            
-            
         </div>
     )
 }

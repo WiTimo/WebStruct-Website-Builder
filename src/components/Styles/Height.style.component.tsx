@@ -2,12 +2,6 @@ import {useState, useEffect} from "react";
 
 export default function Height({object, changeStyle, resetStyle, customBorder}){
 
-    const [border, setBorder] = useState(object["border"] ? true : false)
-
-    function makeBoxInvisible(){
-        document.querySelector(".custom-border").style.opacity = "0";
-    }
-
     return(
         <div className="height-container">
             <label htmlFor="height">Height: </label>
