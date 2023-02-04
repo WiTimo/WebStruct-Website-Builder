@@ -1,15 +1,19 @@
 import {useState, useEffect} from "react";
 
-export default function Height({object, changeStyle, resetStyle}){
+export default function Height({object, changeStyle, resetStyle, customBorder}){
 
     const [border, setBorder] = useState(object["border"] ? true : false)
+
+    function makeBoxInvisible(){
+        document.querySelector(".custom-border").style.opacity = "0";
+    }
 
     return(
         <div className="height-container">
             <label htmlFor="height">Height: </label>
-            <input id="height-range" name="height" type="range" value={object["height"] ? object["height"][0] : "10"} onChange={(e) => changeStyle("height", `${e.target.value}`, document.querySelector("#height-unit-dropdown").value, true)}/>
-            <input id="height" name="height" value={object["height"] ? object["height"][0] : "10"} onChange={(e) => changeStyle("height", `${e.target.value}`, document.querySelector("#height-unit-dropdown").value, true)} />
-            <select name="height" id="height-unit-dropdown" value={object["height"] ? object["height"][1] : "vh"} onChange={(e) => changeStyle("height", `${document.querySelector("#height").value}`, e.target.value, true)} >
+            <input id="height-range" name="height" type="range" value={object["height"] ? object["height"][0] : "10"} onChange={(e) => changeStyle("height", `${e.target.value}`, document.querySelector("#height-unit-dropdown").value, true)} onBlur={() => customBorder()}/>
+            <input id="height" name="height" type="number" value={object["height"] ? object["height"][0] : "10"} onChange={(e) => changeStyle("height", `${e.target.value}`, document.querySelector("#height-unit-dropdown").value, true)} onBlur={() => customBorder()} />
+            <select name="height" id="height-unit-dropdown" value={object["height"] ? object["height"][1] : "vh"} onChange={(e) => changeStyle("height", `${document.querySelector("#height").value}`, e.target.value, true)} onBlur={() => customBorder()} >
                 <option value="px">px</option>
                 <option value="pt">pt</option>
                 <option value="%">%</option>

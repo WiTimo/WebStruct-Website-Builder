@@ -12,80 +12,71 @@ import Height from "../../Styles/Height.style.component";
 import BGColor from "../../Styles/BGColor.style.component";
 import BorderRadius from "../../Styles/BorderRadius.style.component";
 import VerticalAlign from "../../Styles/VerticalAlign.style.component";
-import Absolute from "../../Styles/Absolute.style.component";
+import Position from "../../Styles/Absolute.style.component";
 import Margin from "../../Styles/Margin.style.component";
 import Padding from "../../Styles/Padding.style.component";
 import Border from "../../Styles/Border.style.component";
 import Opacity from "../../Styles/Opacity.style.component";
-import ZIndex from "../../Styles/ZIndex.style.component";
-import BoxShadow from "../../Styles/BoxShadow.style.component";
-import Position from "../../Styles/Position.style.component";
-import Overflow from "../../Styles/Overflow.style.component";
-import Cursor from "../../Styles/Cursor.style.component";
+import Collapsible from "react-collapsible";
 
-
-export default function Headline({ style, setStyle, html, setHtml, index, object, text = "Default" }) {
+export default function Headline({ style, setStyle, html, setHtml, index, object, text = "Default", changeStyle, resetStyle ,changeText, makeBorderBoxInvisible }) {
 
 
     const newElement = ["Headline", index, object];
-    function changeText(e: any) {
-        const newHTML = [...html];
-        newHTML[2][1][index][1] = e.target.value;
-        newElement[2]["text"] = e.target.value;
-        setHtml(newHTML);
+    
+    function resetStyleHandler(css: string, double = false) {
+        resetStyle(css, double, index, newElement);
     }
 
-    function changeStyle(css: string, value: string, unit = "", double = false) {
-        const newStyle = [...style];
-        const styleIdxArray = newStyle[newStyle.indexOf(`#_${index}`) + 1];
-        if (styleIdxArray.includes(`${css}: ${value}${unit};`)) return;
-        styleIdxArray.push(`${css}: ${value}${unit};`);
-        let j = 0;
-        for (let i of styleIdxArray) {
-            if (i.includes(`${css}:`) && i !== `${css}: ${value}${unit};`) {
-                styleIdxArray.splice(j, 1)
-            }
-            j++;
-        }
-        if(!double) newElement[2][`${css}`] = value;
-        else newElement[2][`${css}`] = [value, unit];
-        setStyle(newStyle);
+    function changeStyleHandler( css: string, value: string, unit="", double = false) {
+        changeStyle(css, value, unit, double, index, newElement);
     }
 
-    function resetStyle(css: string, double = false) {
-        const newStyle = [...style];
-        const styleIdxArray = newStyle[newStyle.indexOf(`#_${index}`) + 1];
-        let j = 0;
-        for (let i of styleIdxArray) {
-            if (i.includes(`${css}:`)) {
-                styleIdxArray.splice(j, 1)
-            }
-            j++;
-        }
-        if(!double) newElement[2][`${css}`] = "";
-        else newElement[2][`${css}`] = ["", ""];
-        setStyle(newStyle);
+    function changeTextHandler(e: any){
+        changeText(e, index, newElement);
     }
 
     return (
         <div className="elements-container">
-            <Text text={text} changeText={changeText}/>
-            <TextAlign object={object} changeStyle={changeStyle}/>
-            <VerticalAlign object={object} changeStyle={changeStyle} resetStyle={resetStyle}/>
-            <FontFamily object={object} changeStyle={changeStyle}/>
-            <FontSize object={object} changeStyle={changeStyle}/>
-            <Color object={object} changeStyle={changeStyle}/>
-            <BGColor object={object} changeStyle={changeStyle}/>
-            <FontWeight object={object} changeStyle={changeStyle}/>
-            <Display changeStyle={changeStyle} resetStyle={resetStyle}/>  
-            <Width object={object} changeStyle={changeStyle} resetStyle={resetStyle}/>  
-            <Height object={object} changeStyle={changeStyle} resetStyle={resetStyle}/>
-            <BorderRadius object={object} changeStyle={changeStyle}/>
-            <Absolute object={object} changeStyle={changeStyle} resetStyle={resetStyle}/>
-            <Margin object={object} changeStyle={changeStyle} resetStyle={resetStyle}/>
-            <Padding object={object} changeStyle={changeStyle} resetStyle={resetStyle}/>
-            <Border object={object} changeStyle={changeStyle} resetStyle={resetStyle}/>
-            <Opacity object={object} changeStyle={changeStyle}/>
+            <Collapsible trigger="Typography" transitionTime={200} triggerTagName="div" triggerClassName="elements-title">
+                <Text text={text} changeText={changeTextHandler}/>
+                <TextAlign object={object} changeStyle={changeStyleHandler}/>
+                <FontFamily object={object} changeStyle={changeStyleHandler}/>
+                <FontSize object={object} changeStyle={changeStyleHandler}/> 
+                <FontWeight object={object} changeStyle={changeStyleHandler}/>
+            </Collapsible>
+            <Collapsible trigger="Colors" transitionTime={200} triggerTagName="div" triggerClassName="elements-title">
+                <Color object={object} changeStyle={changeStyleHandler}/>
+                <BGColor object={object} changeStyle={changeStyleHandler}/>
+                <Opacity object={object} changeStyle={changeStyleHandler}/>
+            </Collapsible>
+            <Collapsible trigger="Position" transitionTime={200} triggerTagName="div" triggerClassName="elements-title">
+                <Position object={object} changeStyle={changeStyleHandler} resetStyle={resetStyleHandler}/>
+            </Collapsible>
+            <Collapsible trigger="Align" transitionTime={200} triggerTagName="div" triggerClassName="elements-title">
+                <VerticalAlign object={object} changeStyle={changeStyleHandler} resetStyle={resetStyleHandler}/>
+            </Collapsible>
+            <Collapsible trigger="Display" transitionTime={200} triggerTagName="div" triggerClassName="elements-title">
+                <Display changeStyle={changeStyleHandler} resetStyle={resetStyleHandler}/>  
+            </Collapsible>
+            <Collapsible trigger="Size" transitionTime={200} triggerTagName="div" triggerClassName="elements-title">
+                <Width object={object} changeStyle={changeStyleHandler} resetStyle={resetStyleHandler} customBorder={makeBorderBoxInvisible}/>  
+                <Height object={object} changeStyle={changeStyleHandler} resetStyle={resetStyleHandler} customBorder={makeBorderBoxInvisible}/>
+            </Collapsible>
+            <Collapsible trigger="Border" transitionTime={200} triggerTagName="div" triggerClassName="elements-title">
+                <Border object={object} changeStyle={changeStyleHandler} resetStyle={resetStyleHandler}/>
+                <BorderRadius object={object} changeStyle={changeStyleHandler}/>
+            </Collapsible>
+            <Collapsible trigger="Spacing" transitionTime={200} triggerTagName="div" triggerClassName="elements-title">
+                <Margin object={object} changeStyle={changeStyleHandler} resetStyle={resetStyleHandler} customBorder={makeBorderBoxInvisible}/>
+                <Padding object={object} changeStyle={changeStyleHandler} resetStyle={resetStyleHandler} customBorder={makeBorderBoxInvisible}/>
+            </Collapsible>
+           
+            
+            
+
+            
+            
         </div>
     )
 }
