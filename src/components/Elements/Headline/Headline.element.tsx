@@ -1,5 +1,4 @@
 import "./Headline.styles.scss";
-import { useEffect, useState, useRef, useCallback } from "react"
 import FontWeight from "../../Styles/FontWeight.style.component";
 import Color from "../../Styles/Color.style.component";
 import FontSize from "../../Styles/FontSize.style.component";
@@ -19,7 +18,7 @@ import Border from "../../Styles/Border.style.component";
 import Opacity from "../../Styles/Opacity.style.component";
 import Collapsible from "react-collapsible";
 
-export default function Headline({ style, setStyle, html, setHtml, index, object, text = "Default", changeStyle, resetStyle ,changeText, makeBorderBoxInvisible }) {
+export default function Headline({index, object, text = "Default", changeStyle, resetStyle ,changeText, makeBorderBoxInvisible }) {
 
 
     const newElement = ["Headline", index, object];

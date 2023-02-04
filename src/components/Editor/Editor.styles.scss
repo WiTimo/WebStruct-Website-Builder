@@ -71,28 +71,70 @@
     .custom-border-top-dot {
       left: 50%;
       transform: translateX(-50%);
-      border-bottom-right-radius: 100%;
-      border-bottom-left-radius: 100%;
-    }
-    .custom-border-bottom-dot {
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
+      top: -1.4rem;
       border-top-right-radius: 100%;
       border-top-left-radius: 100%;
+    }
+    .custom-border-bottom-dot {
+      left: 50%;
+      bottom: -1.4em;
+      transform: translateX(-50%);
+      border-bottom-right-radius: 100%;
+      border-bottom-left-radius: 100%;
     }
     .custom-border-left-dot {
       top: 50%;
       transform: translateY(-50%);
-      border-bottom-right-radius: 100%;
-      border-top-right-radius: 100%;
+      left: -1.4em;
+      border-bottom-left-radius: 100%;
+      border-top-left-radius: 100%;
     }
     .custom-border-right-dot {
-      right: 0;
+      top: 50%;
+      right: -1.4em;
+      transform: translateY(-50%);
+      border-top-right-radius: 100%;
+      border-bottom-right-radius: 100%;
+    }
+    .custom-border-top-inner-dot {
+      top: 0em;
+      height: 0.7em;
+      left: 50%;
+      transform: translateX(-50%);
+      border-bottom-right-radius: 100%;
+      border-bottom-left-radius: 100%;
+      border-top-right-radius: 0;
+      border-top-left-radius: 0;
+    }
+    .custom-border-bottom-inner-dot {
+      bottom: 0em;
+      height: 0.7em;
+      left: 50%;
+      transform: translateX(-50%);
+      border-top-right-radius: 100%;
+      border-top-left-radius: 100%;
+      border-bottom-right-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+    .custom-border-left-inner-dot {
+      left: 0em;
+      height: 0.7em;
+      top: 50%;
+      transform: translateY(-50%);
+      border-top-right-radius: 100%;
+      border-bottom-right-radius: 100%;
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+    .custom-border-right-inner-dot {
+      right: 0em;
+      height: 0.7em;
       top: 50%;
       transform: translateY(-50%);
       border-top-left-radius: 100%;
       border-bottom-left-radius: 100%;
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
     }
   }
 }
