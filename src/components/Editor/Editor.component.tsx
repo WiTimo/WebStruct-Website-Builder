@@ -8,13 +8,18 @@ import ElementSelector from "../ElementSelector/ElementSelector.component";
 
 export default function Editor() {
 
-    const defaultHtml = ["<html>", ["<head>", ["<style>","", "</style>"], "</head>"], ["<body>", [], "</body>"], "</html>"];
+    const defaultHtml = ["<html>", ["<head>", ["<style>", "", "</style>"], "</head>"], ["<body>", [], "</body>"], "</html>"];
     const defaultStyle = ["*", ["margin: 0;", "padding: 0;", "box-sizing: border-box;", "overflow-x: hidden;"], "body", ["background-color: white;"]]
 
     const [html, setHtml] = useState(defaultHtml);
     const [style, setStyle] = useState(defaultStyle);
     const [elements, setElements] = useState([]);
-    const [currentElement, setCurrentElement] = useState(["Headline","0",{}]);
+    const [currentElement, setCurrentElement] = useState(["Headline", 0, {}]);
+    const [moving, setMoving] = useState(false);
+    const [holding, setHolding] = useState(false);
+    const [margin, setMargin] = useState([0, 0, 0, 0]);
+    const [padding, setPadding] = useState([0, 0, 0, 0]);
+    const elementsLength = useRef(0);
 
 
     //create string from array
@@ -23,40 +28,40 @@ export default function Editor() {
         htmlStringEnd = "";
         const htmlString = html.join("");
         let htmlStringLength = htmlString.length;
-        for(let i = 0; i < htmlStringLength; i++){
-            if(htmlString[i] === ",") htmlStringEnd+="";
-            else htmlStringEnd+=htmlString[i];
+        for (let i = 0; i < htmlStringLength; i++) {
+            if (htmlString[i] === ",") htmlStringEnd += "";
+            else htmlStringEnd += htmlString[i];
         }
-    },[html])
+    }, [html])
 
     //add style to html
     //html[1][1][1] =
     useEffect(() => {
         let styleString = "";
         const styleLength = style.length;
-        for(let i = 0; i < styleLength; i++){
-            if(i % 2 != 0){
-                styleString+=style[i]+"} ";
-            }else{
-                for(let j = 0; j < style[i].length; j++){
-                    styleString+=style[i][j];
+        for (let i = 0; i < styleLength; i++) {
+            if (i % 2 != 0) {
+                styleString += style[i] + "} ";
+            } else {
+                for (let j = 0; j < style[i].length; j++) {
+                    styleString += style[i][j];
                 }
-                styleString+="{";
+                styleString += "{";
             }
         }
         const newHTML = [...html];
         newHTML[1][1][1] = styleString;
-        setHtml(newHTML);   
-    },[style])
-    
-    
+        setHtml(newHTML);
+    }, [style])
+
+
 
     useEffect(() => {
         //update Iframe
         const iframe = document.querySelector("iframe");
-        if(!iframe) return;
+        if (!iframe) return;
         const iframeDocument = iframe.contentDocument;
-        if(!iframeDocument) return;
+        if (!iframeDocument) return;
         const iframeBody = iframeDocument.body;
 
         const updateIframe = () => {
@@ -64,19 +69,23 @@ export default function Editor() {
         };
 
         updateIframe();
-    },[html])
+    }, [html])
 
     useEffect(() => {
         const iframe = document.querySelector("iframe");
-        if(!iframe) return;
+        if (!iframe) return;
         const iframeDocument = iframe.contentDocument;
-        if(!iframeDocument) return;
+        if (!iframeDocument) return;
         //add event listeners
         const customBorder = document.querySelector(".custom-border");
-        if(!customBorder) return;
-        iframeDocument.querySelectorAll(".element").forEach((element) => {
+        if (!customBorder) return;
+       iframeDocument.querySelectorAll(".element").forEach((element) => {
             element.addEventListener("pointerenter", () => {
-                customBorder.style = `left: ${element.getBoundingClientRect().left}px; top: ${element.getBoundingClientRect().top}px; width: ${element.getBoundingClientRect().width+2}px; height: ${element.getBoundingClientRect().height+2}px; opacity: 1;`;
+                customBorder.style = `left: ${element.getBoundingClientRect().left}px; top: ${element.getBoundingClientRect().top}px; width: ${element.getBoundingClientRect().width + 2}px; height: ${element.getBoundingClientRect().height + 2}px; opacity: 1;`;
+                const dots = document.querySelectorAll(".custom-border-dot");
+                for(let i of dots){
+                    i.style.opacity = "0";
+                }
             });
             element.addEventListener("pointerleave", () => {
                 customBorder.style.opacity = `0`;
@@ -84,79 +93,161 @@ export default function Editor() {
 
             element.addEventListener("click", () => {
                 const elementIdx: number = parseInt(element.classList[1]);
-                setCurrentElement([elements[elementIdx][0], elements[elementIdx][1], elements[elementIdx][2]]);
+                setCurrentElement(elements[elementIdx]);
+                const dots = document.querySelectorAll(".custom-border-dot");
+                for(let i of dots){
+                    i.style.opacity = "1";
+                }
             })
         })
 
         document.querySelectorAll(".custom-border-dot").forEach(element => {
-           element.addEventListener("pointerover", (e) => {
+            element.addEventListener("pointerover", (e) => {
                 customBorder.style.opacity = "1";
-           });
-           element.addEventListener("pointerout", (e) => {
+                element.style.opacity = "1";
+            });
+            element.addEventListener("pointerout", (e) => {
                 customBorder.style.opacity = "0";
-           })
+            })
         });
 
-        //add event listeners for custom border
-        const bottomDot = document.querySelector(".custom-border-bottom-dot");
-        
-        bottomDot?.addEventListener("pointerdown", (e) => {bottomDot.setPointerCapture(e.pointerId); setDotPosition("height", e.pageY); bottomDot?.addEventListener("pointermove", (e) => {setDotPosition("height", e.pageY)}, false);    })
-        bottomDot?.addEventListener("pointerup", () => {bottomDot.removeEventListener("pointermove", (e) => {setDotPosition("height", e.pageY)}, false)}, {once: true});
+    }, [html])
 
-    },[html])
-
-    function setDotPosition(css:string, position: number){
-        if(css === "height") changeStyle("height", Math.round(position/(window.innerHeight/100)), "vh", true, currentElement[1], currentElement[2])
-        else changeStyle("width", Math.round(position/(window.innerWidth/100)), "vw", true, currentElement[1], currentElement[2]);
-    }
-
-
-    useEffect(() => {
-        document.querySelector(".section-2")?.scrollTo(0,0);
-    },[currentElement])
-
-
-    
-
-    function changeStyle(css: string, value: string, unit = "", double = false, index: number, object: any) {
-        const newStyle = [...style];
-        const styleIdxArray: string[] = newStyle[newStyle.indexOf(`#_${index}`) + 1];
-        if (styleIdxArray.includes(`${css}: ${value}${unit};`)) return;
-        try{
-            styleIdxArray.push(`${css}: ${value}${unit};`);
-            let j = 0;
-        for (let i of styleIdxArray) {
-            if (i.includes(`${css}:`) && i !== `${css}: ${value}${unit};`) {
-                styleIdxArray.splice(j, 1)
-            }
-            j++;
-        }
-        const newElements = [...elements]
-        if(!double) newElements[index][2][`${css}`] = value;
-        else newElements[index][2][`${css}`] = [value, unit];
-        setElements(newElements);
-        setStyle(newStyle);
-        } catch (e){
-            return;
-        }
-        
-        
-        //iframe
+    function onPointerMove(e: any, direction: string){
+        let dot;
+        if(direction === "height") dot = document.querySelector(".custom-border-bottom-dot");
+        else dot = document.querySelector(".custom-border-right-dot");
+        dot?.setPointerCapture(e.pointerId);
         const Iframe = document.querySelector("iframe");
         if(!Iframe) return;
         const IframeDocument = Iframe.contentDocument;
         if(!IframeDocument) return;
-        const element = IframeDocument.querySelector(`#_${index}`);
+        const element = IframeDocument.querySelector(`#_${currentElement[1]}`);
         if(!element) return;
-        const StyleBorderArray = ["width", "height", "margin-top", "margin-bottom", "margin-left", "margin-right", "padding-top", "padding-bottom", "padding-left", "padding-right"]
-        if(StyleBorderArray.includes(css)){
-            const elementRect = element.getBoundingClientRect();
-            const customBorder = document.querySelector(".custom-border");
-            if(!customBorder) return;
-            customBorder.style = `left: ${elementRect.left}px; top: ${elementRect.top}px; width: ${elementRect.width+2}px; height: ${elementRect.height+2}px; opacity: 1;`
+        if(moving){
+            if(direction === "height") setDotPosition("height", e.pageY- element.getBoundingClientRect().top);
+            else setDotPosition("width", e.pageX - element.getBoundingClientRect().left);
         }
     }
-    
+
+    function setDotPosition(css: string, position: number) {
+        if (css === "height") changeStyle("height", Math.round(position / (window.innerHeight / 100)), "vh", true, currentElement[1], currentElement[2])
+        else changeStyle("width", Math.round(position / (window.innerWidth / 100)), "vw", true, currentElement[1], currentElement[2]);
+    }
+
+    function onPointerMoveMargin(e: any, direction: string){
+        let dot;
+        if(direction === "top") dot = document.querySelector(".margin-border-top-dot");
+        else if(direction === "bottom") dot = document.querySelector(".margin-border-bottom-dot");
+        else if(direction === "left") dot = document.querySelector(".margin-border-left-dot");
+        else dot = document.querySelector(".margin-border-right-dot");
+        dot?.setPointerCapture(e.pointerId);
+        const Iframe = document.querySelector("iframe");
+        if(!Iframe) return;
+        const IframeDocument = Iframe.contentDocument;
+        if(!IframeDocument) return;
+        const element = IframeDocument.querySelector(`#_${currentElement[1]}`);
+        if(!element) return;
+        if(holding){
+            setHolding(false);
+            setMargin([element.getBoundingClientRect().top, element.getBoundingClientRect().bottom, element.getBoundingClientRect().left, element.getBoundingClientRect().right])
+        }
+        if(moving){
+            if(direction === "top") setMarginDotPosition("top", e.pageY-margin[0] );
+            else if(direction === "bottom") setMarginDotPosition("bottom", e.pageY- margin[1]);
+            else if(direction === "left") setMarginDotPosition("left", e.pageX - margin[2]);
+            else setMarginDotPosition("right", margin[3]-e.pageX );
+        }
+    }
+
+    function setMarginDotPosition(css: string, position: number) {
+        if (css === "top") changeStyle("margin-top", Math.round(position / (window.innerHeight / 100)), "vh", true, currentElement[1], currentElement[2])
+        else if(css === "bottom") changeStyle("margin-bottom", Math.round(position / (window.innerHeight / 100)), "vh", true, currentElement[1], currentElement[2]);
+        else if(css === "left") changeStyle("margin-left", Math.round(position / (window.innerWidth / 100)), "vw", true, currentElement[1], currentElement[2]);
+        else changeStyle("margin-right", Math.round(position / (window.innerWidth / 100)), "vw", true, currentElement[1], currentElement[2]);
+    }
+
+    function onPointerMovePadding(e: any, direction: string){
+        let dot;
+        if(direction === "top") dot = document.querySelector(".padding-border-top-dot");
+        else if(direction === "bottom") dot = document.querySelector(".padding-border-bottom-dot");
+        else if(direction === "left") dot = document.querySelector(".padding-border-left-dot");
+        else dot = document.querySelector(".padding-border-right-dot");
+        dot?.setPointerCapture(e.pointerId);
+        const Iframe = document.querySelector("iframe");
+        if(!Iframe) return;
+        const IframeDocument = Iframe.contentDocument;
+        if(!IframeDocument) return;
+        const element = IframeDocument.querySelector(`#_${currentElement[1]}`);
+        if(!element) return;
+        if(holding){
+            setHolding(false);
+            setPadding([element.getBoundingClientRect().top, element.getBoundingClientRect().bottom, element.getBoundingClientRect().left, element.getBoundingClientRect().right])
+        }
+        if(moving){
+            if(direction === "top") setPaddingDotPosition("top", e.pageY-padding[0] );
+            else if(direction === "bottom") setPaddingDotPosition("bottom", e.pageY- padding[1]);
+            else if(direction === "left") setPaddingDotPosition("left", e.pageX - padding[2]);
+            else setPaddingDotPosition("right", padding[3]-e.pageX );
+        }
+    }
+
+    function setPaddingDotPosition(css: string, position: number) {
+        if (css === "top") changeStyle("padding-top", Math.round(position / (window.innerHeight / 100)), "vh", true, currentElement[1], currentElement[2])
+        else if(css === "bottom") changeStyle("padding-bottom", Math.round(position / (window.innerHeight / 100)), "vh", true, currentElement[1], currentElement[2]);
+        else if(css === "left") changeStyle("padding-left", Math.round(position / (window.innerWidth / 100)), "vw", true, currentElement[1], currentElement[2]);
+        else changeStyle("padding-right", Math.round(position / (window.innerWidth / 100)), "vw", true, currentElement[1], currentElement[2]);
+    }
+
+
+    useEffect(() => {
+        document.querySelector(".section-2")?.scrollTo(0, 0);
+    }, [currentElement])
+
+
+
+
+    function changeStyle(css: string, value: string, unit = "", double = false, index: number, object: any) {
+        const newStyle = [...style];
+        const newElements = [...elements];
+        if(newElements.length !== elementsLength.current) return;
+        if(currentElement[1] !== index) return;
+        const styleIdxArray: string[] = newStyle[newStyle.indexOf(`#_${index}`) + 1];
+        if (styleIdxArray.includes(`${css}: ${value}${unit};`)) return;
+        try {
+            styleIdxArray.push(`${css}: ${value}${unit};`);
+            let j = 0;
+            for (let i of styleIdxArray) {
+                if (i.includes(`${css}:`) && i !== `${css}: ${value}${unit};`) {
+                    styleIdxArray.splice(j, 1)
+                }
+                j++;
+            }
+            if (!double) newElements[index][2][`${css}`] = value;
+            else newElements[index][2][`${css}`] = [value, unit];
+            setElements(newElements);
+            setStyle(newStyle);
+        } catch (e) {
+            return;
+        }
+
+
+        //iframe
+        const Iframe = document.querySelector("iframe");
+        if (!Iframe) return;
+        const IframeDocument = Iframe.contentDocument;
+        if (!IframeDocument) return;
+        const element = IframeDocument.querySelector(`#_${index}`);
+        if (!element) return;
+        const StyleBorderArray = ["width", "height", "margin-top", "margin-bottom", "margin-left", "margin-right", "padding-top", "padding-bottom", "padding-left", "padding-right"]
+        if (StyleBorderArray.includes(css)) {
+            const elementRect = element.getBoundingClientRect();
+            const customBorder = document.querySelector(".custom-border");
+            if (!customBorder) return;
+            customBorder.style = `left: ${elementRect.left}px; top: ${elementRect.top}px; width: ${elementRect.width + 2}px; height: ${elementRect.height + 2}px; opacity: 1;`
+        }
+    }
+
     function changeText(e: any, index: number, object: any) {
         const newHTML = [...html];
         newHTML[2][1][index][1] = e.target.value;
@@ -175,17 +266,18 @@ export default function Editor() {
             j++;
         }
         const newElements = [...elements]
-        if(!double) newElements[index][2][`${css}`] = "";
+        if (!double) newElements[index][2][`${css}`] = "";
         else newElements[index][2][`${css}`] = ["", ""];
         setElements(newElements);
         setStyle(newStyle);
     }
 
-    function makeBorderBoxInvisible(){
+    function makeBorderBoxInvisible() {
         const customBorder = document.querySelector(".custom-border");
-        if(!customBorder) return;
+        if (!customBorder) return;
         customBorder.style.opacity = "0";
     }
+
 
 
 
@@ -195,50 +287,66 @@ export default function Editor() {
     //add elements
     const addH1 = (content: string, position: number[]) => {
         const newHTML = [...html];
-        newHTML[position[0]][position[1]].push([`<h1 id="_${newHTML[position[0]][position[1]].length}" class="element ${newHTML[position[0]][position[1]].length}">`,content, `</h1>`]);
-        setStyle([...style, `#_${newHTML[position[0]][position[1]].length-1}`, []])
-        setElements([...elements, ["Headline", newHTML[position[0]][position[1]].length-1,{"text": "Headline"}]])
+        newHTML[position[0]][position[1]].push([`<h1 id="_${newHTML[position[0]][position[1]].length}" class="element ${newHTML[position[0]][position[1]].length}">`, content, `</h1>`]);
+        setStyle([...style, `#_${newHTML[position[0]][position[1]].length - 1}`, []])
+        setElements([...elements, ["Headline", newHTML[position[0]][position[1]].length - 1, { "text": "Headline" }]])
+        elementsLength.current += 1;
         setHtml(newHTML);
     }
     const addP = (content: string, position: number[]) => {
         const newHTML = [...html];
         const HTMLPosition = newHTML[position[0]][position[1]];
-        HTMLPosition.push([`<p id="_${HTMLPosition.length}" class="element">`,content, `</p>`]);
-        setStyle([...style, `#_${HTMLPosition.length-1}`, []])
-        setElements([...elements, ["Paragraph", HTMLPosition.length-1,{"text": "Paragraph"}]])
+        HTMLPosition.push([`<p id="_${HTMLPosition.length}" class="element">`, content, `</p>`]);
+        setStyle([...style, `#_${HTMLPosition.length - 1}`, []])
+        setElements([...elements, ["Paragraph", HTMLPosition.length - 1, { "text": "Paragraph" }]])
+        elementsLength.current += 1;
         setHtml(newHTML);
     }
-    
-    return(
+
+    return (
         <div className="editor-container">
             <Draggable handle=".dragable-object-section-1">
                 <div className="section-1">
                     <div className="dragable-object dragable-object-section-1"></div>
-                    <button className="add-button addH1" onClick={() => addH1("Headline", [2,1])}>Add Headline</button>
-                    <button className="add-button addP" onClick={() => addP("Text", [2,1])}>Add Text</button>
-                    <ElementSelector elements={elements} setCurrentElement={setCurrentElement}/>
+                    <button className="add-button addH1" onClick={() => addH1("Headline", [2, 1])}>Add Headline</button>
+                    <button className="add-button addP" onClick={() => addP("Text", [2, 1])}>Add Text</button>
+                    <ElementSelector elements={elements} setCurrentElement={setCurrentElement} />
                 </div>
             </Draggable>
             <div className="custom-border">
                 <div className="custom-border-relative">
-                    <div className="custom-border-dot custom-border-top-dot"></div>
-                    <div className="custom-border-dot custom-border-right-dot"></div>
-                    <div className="custom-border-dot custom-border-bottom-dot"></div>
-                    <div className="custom-border-dot custom-border-left-dot"></div>
-                    <div className="custom-border-dot custom-border-top-dot custom-border-top-inner-dot"></div>
-                    <div className="custom-border-dot custom-border-right-dot custom-border-right-inner-dot"></div>
-                    <div className="custom-border-dot custom-border-bottom-dot custom-border-bottom-inner-dot"></div>
-                    <div className="custom-border-dot custom-border-left-dot custom-border-left-inner-dot"></div>
+                    <div className="custom-border-dot custom-border-right-dot" onPointerDown={() => {setMoving(true)}} onPointerMove={(e) => onPointerMove(e, "width")} onPointerUp={() => setMoving(false)} />
+                    <div className="custom-border-dot custom-border-bottom-dot" onPointerDown={() => {setMoving(true)}} onPointerMove={(e) => onPointerMove(e, "height")} onPointerUp={() => setMoving(false)} />
+                    <div className="custom-border-dot custom-border-right-dot custom-border-right-inner-dot" onPointerDown={() => {setMoving(true)}} onPointerMove={(e) => onPointerMove(e, "width")} onPointerUp={() => setMoving(false)} />
+                    <div className="custom-border-dot custom-border-bottom-dot custom-border-bottom-inner-dot" onPointerDown={() => {setMoving(true)}} onPointerMove={(e) => onPointerMove(e, "height")} onPointerUp={() => setMoving(false)} />
+                    <></>
+                    <div className="custom-border-dot custom-border-top-dot margin-border-top-dot" onPointerDown={() => {setMoving(true)}} onPointerMove={(e) => onPointerMoveMargin(e, "top")} onPointerUp={() => {setMoving(false); setHolding(true)}}/>
+                    <div className="custom-border-dot custom-border-top-inner-dot margin-border-top-inner-dot" onPointerDown={() => {setMoving(true)}} onPointerMove={(e) => onPointerMoveMargin(e, "top")} onPointerUp={() => {setMoving(false); setHolding(true)}}/>
+                    <div className="custom-border-dot custom-border-right-dot margin-border-right-dot" onPointerDown={() => {setMoving(true)}} onPointerMove={(e) => onPointerMoveMargin(e, "right")} onPointerUp={() => {setMoving(false); setHolding(true)}}/>
+                    <div className="custom-border-dot custom-border-right-inner-dot margin-border-right-inner-dot" onPointerDown={() => {setMoving(true)}} onPointerMove={(e) => onPointerMoveMargin(e, "right")} onPointerUp={() => {setMoving(false); setHolding(true)}}/>
+                    <div className="custom-border-dot custom-border-left-dot margin-border-left-dot" onPointerDown={() => {setMoving(true)}} onPointerMove={(e) => onPointerMoveMargin(e, "left")} onPointerUp={() => {setMoving(false); setHolding(true)}}/>
+                    <div className="custom-border-dot custom-border-left-inner-dot margin-border-left-inner-dot" onPointerDown={() => {setMoving(true)}} onPointerMove={(e) => onPointerMoveMargin(e, "left")} onPointerUp={() => {setMoving(false); setHolding(true)}}/>
+                    <div className="custom-border-dot custom-border-bottom-dot margin-border-bottom-inner-dot" onPointerDown={() => {setMoving(true)}} onPointerMove={(e) => onPointerMoveMargin(e, "bottom")} onPointerUp={() => {setMoving(false); setHolding(true)}}/>
+                    <div className="custom-border-dot custom-border-bottom-inner-dot margin-border-bottom-dot" onPointerDown={() => {setMoving(true)}} onPointerMove={(e) => onPointerMoveMargin(e, "bottom")} onPointerUp={() => {setMoving(false); setHolding(true)}}/>
+                    <></>
+                    <div className="custom-border-dot custom-border-top-dot padding-border-top-dot" onPointerDown={() => {setMoving(true)}} onPointerMove={(e) => onPointerMovePadding(e, "top")} onPointerUp={() => {setMoving(false); setHolding(true)}}/>
+                    <div className="custom-border-dot custom-border-top-inner-dot padding-border-top-inner-dot" onPointerDown={() => {setMoving(true)}} onPointerMove={(e) => onPointerMovePadding(e, "top")} onPointerUp={() => {setMoving(false); setHolding(true)}}/>
+                    <div className="custom-border-dot custom-border-right-dot padding-border-right-dot" onPointerDown={() => {setMoving(true)}} onPointerMove={(e) => onPointerMovePadding(e, "right")} onPointerUp={() => {setMoving(false); setHolding(true)}}/>
+                    <div className="custom-border-dot custom-border-right-inner-dot padding-border-right-inner-dot" onPointerDown={() => {setMoving(true)}} onPointerMove={(e) => onPointerMovePadding(e, "right")} onPointerUp={() => {setMoving(false); setHolding(true)}}/>
+                    <div className="custom-border-dot custom-border-left-dot padding-border-left-dot" onPointerDown={() => {setMoving(true)}} onPointerMove={(e) => onPointerMovePadding(e, "left")} onPointerUp={() => {setMoving(false); setHolding(true)}}/>
+                    <div className="custom-border-dot custom-border-left-inner-dot padding-border-left-inner-dot" onPointerDown={() => {setMoving(true)}} onPointerMove={(e) => onPointerMovePadding(e, "left")} onPointerUp={() => {setMoving(false); setHolding(true)}}/>
+                    <div className="custom-border-dot custom-border-bottom-dot padding-border-bottom-inner-dot" onPointerDown={() => {setMoving(true)}} onPointerMove={(e) => onPointerMovePadding(e, "bottom")} onPointerUp={() => {setMoving(false); setHolding(true)}}/>
+                    <div className="custom-border-dot custom-border-bottom-inner-dot padding-border-bottom-dot" onPointerDown={() => {setMoving(true)}} onPointerMove={(e) => onPointerMovePadding(e, "bottom")} onPointerUp={() => {setMoving(false); setHolding(true)}}/>
                 </div>
             </div>
-            <iframe className="website-showcase-iframe" sandbox="allow-same-origin allow-scripts" frameBorder="0"/>
+            <iframe className="website-showcase-iframe" sandbox="allow-same-origin allow-scripts" frameBorder="0" />
             <Draggable handle=".dragable-object-section-2">
                 <div className="section-2">
                     <div className="dragable-object dragable-object-section-2"></div>
-                    <ElementHub element={currentElement[0]} index={currentElement[1]} object={currentElement[2]} changeStyle={changeStyle} resetStyle={resetStyle} changeText={changeText} makeBorderBoxInvisible={makeBorderBoxInvisible}/>
+                    <ElementHub element={currentElement[0]} index={currentElement[1]} object={currentElement[2]} changeStyle={changeStyle} resetStyle={resetStyle} changeText={changeText} makeBorderBoxInvisible={makeBorderBoxInvisible} />
                 </div>
             </Draggable>
-            
+
         </div>
     )
 }
