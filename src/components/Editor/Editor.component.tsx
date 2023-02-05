@@ -19,23 +19,26 @@ export default function Editor() {
     const [holding, setHolding] = useState(false);
     const [margin, setMargin] = useState([0, 0, 0, 0]);
     const [padding, setPadding] = useState([0, 0, 0, 0]);
+    const [mouseMoving, setMouseMoving] = useState(false);
+    const [mousePosition, setMousePosition] = useState([0, 0]);
+    const [currentX, setCurrentX] = useState(0);
+    const [currentY, setCurrentY] = useState(0);
     const elementsLength = useRef(0);
 
 
     //create string from array
     let htmlStringEnd = "";
     useEffect(() => {
-        htmlStringEnd = "";
-        const htmlString = html.join("");
+        htmlStringEnd = html.flat(Infinity).join("")
+        /* console.log(html.flat(Infinity).join(""))
         let htmlStringLength = htmlString.length;
         for (let i = 0; i < htmlStringLength; i++) {
             if (htmlString[i] === ",") htmlStringEnd += "";
             else htmlStringEnd += htmlString[i];
-        }
+        } */
     }, [html])
 
     //add style to html
-    //html[1][1][1] =
     useEffect(() => {
         let styleString = "";
         const styleLength = style.length;
@@ -48,6 +51,10 @@ export default function Editor() {
                 }
                 styleString += "{";
             }
+        }
+        const StyleStringLength = styleString.length;
+        for(let i = 0; i < StyleStringLength; i++){
+            if(styleString[i] === "," && styleString[i-1] === ";") styleString = styleString.slice(0, i) + styleString.slice(i + 1);
         }
         const newHTML = [...html];
         newHTML[1][1][1] = styleString;
@@ -99,7 +106,27 @@ export default function Editor() {
                     i.style.opacity = "1";
                 }
             })
+            element.addEventListener("dblclick", (e) => {
+                setMousePosition([e.pageX, e.pageY]);
+                setMouseMoving(true)
+                if(currentElement[2]["transform"] !== undefined){
+                    const currentXArr = currentElement[2]["transform"].split("");
+                    const currentYArr = currentXArr.slice(currentXArr.indexOf(","), currentXArr.indexOf(")"));
+                    setCurrentX(parseInt(currentXArr.slice(currentXArr.indexOf("(") + 1, currentXArr.indexOf("p")).join("")));
+                    setCurrentY(parseInt(currentYArr.slice(currentYArr.indexOf(",") + 2, currentYArr.indexOf("p")).join("")));
+                }
+
+            })
+            element.addEventListener("mousedown", () => {
+                setMouseMoving(false);
+            })
+            element.addEventListener("mousemove", (e) => {
+                if(!mouseMoving) return;
+                changeStyle("transform", `translate(${currentX + e.pageX - mousePosition[0]}px, ${currentY + e.pageY - mousePosition[1]}px)`, undefined, undefined, currentElement[1], currentElement[2]);
+            })
         })
+
+        
 
         document.querySelectorAll(".custom-border-dot").forEach(element => {
             element.addEventListener("pointerover", (e) => {
@@ -111,7 +138,7 @@ export default function Editor() {
             })
         });
 
-    }, [html])
+    }, [html, style, mouseMoving])
 
     function onPointerMove(e: any, direction: string){
         let dot;
@@ -199,13 +226,9 @@ export default function Editor() {
         else changeStyle("padding-right", Math.round(position / (window.innerWidth / 100)), "vw", true, currentElement[1], currentElement[2]);
     }
 
-
     useEffect(() => {
         document.querySelector(".section-2")?.scrollTo(0, 0);
     }, [currentElement])
-
-
-
 
     function changeStyle(css: string, value: string, unit = "", double = false, index: number, object: any) {
         const newStyle = [...style];
@@ -230,7 +253,6 @@ export default function Editor() {
         } catch (e) {
             return;
         }
-
 
         //iframe
         const Iframe = document.querySelector("iframe");
@@ -278,18 +300,13 @@ export default function Editor() {
         customBorder.style.opacity = "0";
     }
 
-
-
-
-
-
-
     //add elements
     const addH1 = (content: string, position: number[]) => {
         const newHTML = [...html];
-        newHTML[position[0]][position[1]].push([`<h1 id="_${newHTML[position[0]][position[1]].length}" class="element ${newHTML[position[0]][position[1]].length}">`, content, `</h1>`]);
-        setStyle([...style, `#_${newHTML[position[0]][position[1]].length - 1}`, []])
-        setElements([...elements, ["Headline", newHTML[position[0]][position[1]].length - 1, { "text": "Headline" }]])
+        const HTMLPosition = newHTML[position[0]][position[1]];
+        HTMLPosition.push([`<h1 id="_${HTMLPosition.length}" class="element ${HTMLPosition.length}">`, content, `</h1>`]);
+        setStyle([...style, `#_${HTMLPosition.length - 1}`, []])
+        setElements([...elements, ["Headline", HTMLPosition.length - 1, { "text": "Headline" }]])
         elementsLength.current += 1;
         setHtml(newHTML);
     }
