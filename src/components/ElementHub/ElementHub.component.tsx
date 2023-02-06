@@ -12,6 +12,6 @@ import Pharagraph from "../Elements/Paragraph/Pharagraph.element";
         case "Paragraph":
             return <Pharagraph index={index} object={object} text={object["text"]} changeStyle={changeStyle} resetStyle={resetStyle} changeText={changeText} makeBorderBoxInvisible={makeBorderBoxInvisible}/>
         default:
-            return <div></div>
+            return <div>Choose an element</div>
     }
  }

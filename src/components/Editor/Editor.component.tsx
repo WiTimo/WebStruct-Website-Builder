@@ -14,7 +14,7 @@ export default function Editor() {
     const [html, setHtml] = useState(defaultHtml);
     const [style, setStyle] = useState(defaultStyle);
     const [elements, setElements] = useState([]);
-    const [currentElement, setCurrentElement] = useState(["Headline", 0, {}]);
+    const [currentElement, setCurrentElement] = useState(["none", 0, {}]);
     const [moving, setMoving] = useState(false);
     const [holding, setHolding] = useState(false);
     const [margin, setMargin] = useState([0, 0, 0, 0]);
@@ -30,12 +30,20 @@ export default function Editor() {
     let htmlStringEnd = "";
     useEffect(() => {
         htmlStringEnd = html.flat(Infinity).join("")
-        /* console.log(html.flat(Infinity).join(""))
-        let htmlStringLength = htmlString.length;
-        for (let i = 0; i < htmlStringLength; i++) {
-            if (htmlString[i] === ",") htmlStringEnd += "";
-            else htmlStringEnd += htmlString[i];
-        } */
+
+         //update Iframe
+         const iframe = document.querySelector("iframe");
+         if (!iframe) return;
+         const iframeDocument = iframe.contentDocument;
+         if (!iframeDocument) return;
+         const iframeBody = iframeDocument.body;
+ 
+         const updateIframe = () => {
+             iframeBody.innerHTML = htmlStringEnd;
+         };
+ 
+         updateIframe();
+
     }, [html])
 
     //add style to html
@@ -60,23 +68,6 @@ export default function Editor() {
         newHTML[1][1][1] = styleString;
         setHtml(newHTML);
     }, [style])
-
-
-
-    useEffect(() => {
-        //update Iframe
-        const iframe = document.querySelector("iframe");
-        if (!iframe) return;
-        const iframeDocument = iframe.contentDocument;
-        if (!iframeDocument) return;
-        const iframeBody = iframeDocument.body;
-
-        const updateIframe = () => {
-            iframeBody.innerHTML = htmlStringEnd;
-        };
-
-        updateIframe();
-    }, [html])
 
     useEffect(() => {
         const iframe = document.querySelector("iframe");
@@ -135,15 +126,8 @@ export default function Editor() {
         document.querySelectorAll(".custom-border-dot").forEach(element => {
             element.addEventListener("pointerover", (e) => {
                 customBorder.style.opacity = "1";
-                if(currentElement[2]["width"] || currentElement[2]["height"]){
-                    if(element.classList.contains("custom-margin-dot") || element.classList.contains("custom-padding-dot") && iframeDocument.querySelector(`#_${currentElement[1]}`).clientHeight > 100 && iframeDocument.querySelectorAll(`#_${currentElement[1]}`).clientWidth > 100){
-                        marginMarker.style.opacity = "1";
-                        paddingMarker.style.opacity = "1";
-                        element.style.opacity = "1";
-                    }
-                }else{
-                    element.style.opacity = "1";
-                }
+                if(element.classList.contains(""))
+                element.style.opacity = "1";
             });
             element.addEventListener("pointerout", (e) => {
                 customBorder.style.opacity = "0";
@@ -278,8 +262,8 @@ export default function Editor() {
         const newStyle = [...style];
         const newElements = [...elements];
         if(newElements.length !== elementsLength.current) return;
-        if(currentElement[1] !== index) return;
-        const styleIdxArray: string[] = newStyle[newStyle.indexOf(`#_${index}`) + 1];
+        if(currentElement[1] !== currentElement[1]) return;
+        const styleIdxArray: string[] = newStyle[newStyle.indexOf(`#_${currentElement[1]}`) + 1];
         if (styleIdxArray.includes(`${css}: ${value}${unit};`)) return;
         try {
             styleIdxArray.push(`${css}: ${value}${unit};`);
@@ -290,8 +274,8 @@ export default function Editor() {
                 }
                 j++;
             }
-            if (!double) newElements[index][2][`${css}`] = value;
-            else newElements[index][2][`${css}`] = [value, unit];
+            if (!double) newElements[currentElement[1]][2][`${css}`] = value;
+            else newElements[currentElement[1]][2][`${css}`] = [value, unit];
             setElements(newElements);
             setStyle(newStyle);
         } catch (e) {
@@ -316,7 +300,7 @@ export default function Editor() {
 
     function changeText(e: any, index: number, object: any) {
         const newHTML = [...html];
-        newHTML[2][1][index][1] = e.target.value;
+        newHTML[2][1][currentElement[1]][1] = e.target.value;
         object["text"] = e.target.value;
         setHtml(newHTML);
     }
@@ -344,6 +328,91 @@ export default function Editor() {
         customBorder.style.opacity = "0";
     }
 
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Delete") {
+            deleteCurrentElement();
+        }
+    })
+
+    //remove elements
+    function deleteCurrentElement(){
+        if(currentElement[0] === "none") return;
+        const currentIdx: number = currentElement[1];
+        const newHTML = [...html];
+        const newElements = [...elements];
+        const newStyle = [...style];
+        const newStyleIdx = newStyle.indexOf(`#_${currentIdx}`);
+        newStyle.splice(newStyleIdx, 2);
+        newHTML[2][1].splice(currentIdx, 1);
+        newElements.splice(currentIdx, 1);
+        for(let i = currentIdx; i<newElements.length; i++){
+            newElements[i][1] -= 1;
+        }
+        let j = currentIdx;
+        for(let i = newStyleIdx; i<newStyle.length; i+=2){
+            newStyle[i] = `#_${newElements[j][1]}`;
+            j++;
+        }
+        for(let i = currentIdx; i<newHTML[2][1].length; i++){
+            newHTML[2][1][i][0] = `<h1 id="_${i}" class="element ${i}">`;
+        }
+        setStyle(newStyle);
+        setHtml(newHTML);
+        setElements(newElements);
+        if(newElements.length !== 0){
+            setCurrentElement(newElements[newElements.length-1]);
+        }else{
+            setCurrentElement(["none", 0, {}])
+        }
+        makeBorderBoxInvisible();
+        elementsLength.current -= 1;
+    }
+
+    function moveCurrentElement(direction: string){
+        const currentIdx: number = currentElement[1];
+        let index: number = 0;
+        if(direction === "up"){
+            //up
+            if(currentIdx === 0 || currentElement[0] === "none") return;
+            index = -1
+        }else{
+            //down
+            if(currentIdx === elementsLength.current - 1 || currentElement[0] === "none") return;
+            index = 1
+        }
+        const newHTML = [...html];
+        const newElements = [...elements];
+        const newStyle = [...style];
+        const newStyleIdx = newStyle.indexOf(`#_${currentIdx}`);
+        const newStyleIdx2 = newStyle.indexOf(`#_${currentIdx + index}`);
+        const newStyleContent = newStyle[newStyleIdx+1];
+        const newStyleContent2 = newStyle[newStyleIdx2+1];
+        newStyle[newStyleIdx+1] = newStyleContent2;
+        newStyle[newStyleIdx2+1] = newStyleContent;
+        const newHTMLContent = newHTML[2][1][currentIdx];
+        const newHTMLContent2 = newHTML[2][1][currentIdx + index];
+        newHTML[2][1][currentIdx] = newHTMLContent2;
+        newHTML[2][1][currentIdx + index] = newHTMLContent;
+        newHTML[2][1][currentIdx][0] = `<h1 id="_${currentIdx}" class="element ${currentIdx}">`;
+        newHTML[2][1][currentIdx + index][0] = `<h1 id="_${currentIdx + index}" class="element ${currentIdx + index}">`;
+        const newElementsContent = newElements[currentIdx];
+        const newElementsContent2 = newElements[currentIdx + index];
+        newElements[currentIdx] = newElementsContent2;
+        newElements[currentIdx + index] = newElementsContent;
+        if(direction === "up"){
+            newElements[currentIdx][1] += 1;
+            newElements[currentIdx + index][1] -= 1;
+        }else{
+            newElements[currentIdx][1] -= 1;
+            newElements[currentIdx + index][1] += 1;
+        }
+        
+        setStyle(newStyle);
+        setHtml(newHTML);
+        setElements(newElements);
+        setCurrentElement(newElements[currentIdx + index]);
+    }
+
     //add elements
     const addH1 = (content: string, position: number[]) => {
         const newHTML = [...html];
@@ -357,9 +426,9 @@ export default function Editor() {
     const addP = (content: string, position: number[]) => {
         const newHTML = [...html];
         const HTMLPosition = newHTML[position[0]][position[1]];
-        HTMLPosition.push([`<p id="_${HTMLPosition.length}" class="element">`, content, `</p>`]);
+        HTMLPosition.push([`<p id="_${HTMLPosition.length}" class="element ${HTMLPosition.length}">`, content, `</p>`]);
         setStyle([...style, `#_${HTMLPosition.length - 1}`, []])
-        setElements([...elements, ["Paragraph", HTMLPosition.length - 1, { "text": "Paragraph" }]])
+        setElements([...elements, ["Paragraph", HTMLPosition.length- 1, { "text": "Paragraph" }]])
         elementsLength.current += 1;
         setHtml(newHTML);
     }
@@ -372,6 +441,9 @@ export default function Editor() {
                     <button className="add-button addH1" onClick={() => addH1("Headline", [2, 1])}>Add Headline</button>
                     <button className="add-button addP" onClick={() => addP("Text", [2, 1])}>Add Text</button>
                     <ElementSelector elements={elements} setCurrentElement={setCurrentElement} />
+                    <button className="delete-element-button" onClick={() => deleteCurrentElement()}>Delete Current Element</button>
+                    <button className="move-element-button move-element-button-up" onClick={() => moveCurrentElement("up")}>Move Current Element UP</button>
+                    <button className="move-element-button move-element-button-down" onClick={() => moveCurrentElement("down")}>Move Current Element DOWN</button>
                 </div>
             </Draggable>
             <div className="custom-border">
