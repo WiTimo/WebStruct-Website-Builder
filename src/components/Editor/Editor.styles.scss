@@ -15,7 +15,7 @@
   z-index: 1000;
   border-radius: 20px;
   overflow: auto;
-  width: 17%;
+  width: 250px;
 }
 
 .website-showcase-iframe {
@@ -316,6 +316,20 @@
       border-bottom-left-radius: 100%;
       border-top-right-radius: 0;
       border-bottom-right-radius: 0;
+    }
+    .custom-border-margin-marker {
+      background: rgba($color: orange, $alpha: 0.5);
+      height: 0;
+      width: 0;
+      opacity: 0;
+      position: absolute;
+    }
+    .custom-border-padding-marker {
+      background: rgba($color: green, $alpha: 0.5);
+      height: 0;
+      width: 0;
+      opacity: 0;
+      position: absolute;
     }
   }
 }
