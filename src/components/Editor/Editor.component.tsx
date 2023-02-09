@@ -31,18 +31,18 @@ export default function Editor() {
     useEffect(() => {
         htmlStringEnd = html.flat(Infinity).join("")
 
-         //update Iframe
-         const iframe = document.querySelector("iframe");
-         if (!iframe) return;
-         const iframeDocument = iframe.contentDocument;
-         if (!iframeDocument) return;
-         const iframeBody = iframeDocument.body;
- 
-         const updateIframe = () => {
-             iframeBody.innerHTML = htmlStringEnd;
-         };
- 
-         updateIframe();
+        //update Iframe
+        const iframe = document.querySelector("iframe");
+        if (!iframe) return;
+        const iframeDocument = iframe.contentDocument;
+        if (!iframeDocument) return;
+        const iframeBody = iframeDocument.body;
+
+        const updateIframe = () => {
+            iframeBody.innerHTML = htmlStringEnd;
+        };
+
+        updateIframe();
 
     }, [html])
 
@@ -61,8 +61,8 @@ export default function Editor() {
             }
         }
         const StyleStringLength = styleString.length;
-        for(let i = 0; i < StyleStringLength; i++){
-            if(styleString[i] === "," && styleString[i-1] === ";") styleString = styleString.slice(0, i) + styleString.slice(i + 1);
+        for (let i = 0; i < StyleStringLength; i++) {
+            if (styleString[i] === "," && styleString[i - 1] === ";") styleString = styleString.slice(0, i) + styleString.slice(i + 1);
         }
         const newHTML = [...html];
         newHTML[1][1][1] = styleString;
@@ -77,11 +77,11 @@ export default function Editor() {
         //add event listeners
         const customBorder = document.querySelector(".custom-border");
         if (!customBorder) return;
-       iframeDocument.querySelectorAll(".element").forEach((element) => {
+        iframeDocument.querySelectorAll(".element").forEach((element) => {
             element.addEventListener("pointerenter", () => {
                 customBorder.style = `left: ${element.getBoundingClientRect().left}px; top: ${element.getBoundingClientRect().top}px; width: ${element.getBoundingClientRect().width + 2}px; height: ${element.getBoundingClientRect().height + 2}px; opacity: 1;`;
                 const dots = document.querySelectorAll(".custom-border-dot");
-                for(let i of dots){
+                for (let i of dots) {
                     i.style.opacity = "0";
                 }
             });
@@ -93,14 +93,14 @@ export default function Editor() {
                 const elementIdx: number = parseInt(element.classList[1]);
                 setCurrentElement(elements[elementIdx]);
                 const dots = document.querySelectorAll(".custom-border-dot");
-                for(let i of dots){
+                for (let i of dots) {
                     i.style.opacity = "1";
                 }
             })
             element.addEventListener("dblclick", (e) => {
                 setMousePosition([e.pageX, e.pageY]);
                 setMouseMoving(true)
-                if(currentElement[2]["transform"] !== undefined){
+                if (currentElement[2]["transform"] !== undefined) {
                     const currentXArr = currentElement[2]["transform"].split("");
                     const currentYArr = currentXArr.slice(currentXArr.indexOf(","), currentXArr.indexOf(")"));
                     setCurrentX(parseInt(currentXArr.slice(currentXArr.indexOf("(") + 1, currentXArr.indexOf("v")).join("")));
@@ -112,7 +112,7 @@ export default function Editor() {
             })
 
             element.addEventListener("pointermove", (e) => {
-                if(!mouseMoving) return;
+                if (!mouseMoving) return;
                 changeStyle("transform", `translate(${Math.round(currentX + (e.pageX - mousePosition[0]) / (window.innerWidth / 100))}vw, ${Math.round(currentY + (e.pageY - mousePosition[1]) / (window.innerHeight / 100))}vh)`, undefined, undefined, currentElement[1], currentElement[2]);
             })
             iframeDocument.addEventListener("scroll", () => {
@@ -120,14 +120,14 @@ export default function Editor() {
             })
         })
 
-        
+
         const marginMarker = document.querySelector(".custom-border-margin-marker");
         const paddingMarker = document.querySelector(".custom-border-padding-marker");
         document.querySelectorAll(".custom-border-dot").forEach(element => {
             element.addEventListener("pointerover", (e) => {
                 customBorder.style.opacity = "1";
-                if(element.classList.contains(""))
-                element.style.opacity = "1";
+                if (element.classList.contains(""))
+                    element.style.opacity = "1";
             });
             element.addEventListener("pointerout", (e) => {
                 customBorder.style.opacity = "0";
@@ -138,19 +138,19 @@ export default function Editor() {
 
     }, [html, style, mouseMoving])
 
-    function onPointerMove(e: any, direction: string){
+    function onPointerMove(e: any, direction: string) {
         let dot;
-        if(direction === "height") dot = document.querySelector(".custom-border-bottom-dot");
+        if (direction === "height") dot = document.querySelector(".custom-border-bottom-dot");
         else dot = document.querySelector(".custom-border-right-dot");
         dot?.setPointerCapture(e.pointerId);
         const Iframe = document.querySelector("iframe");
-        if(!Iframe) return;
+        if (!Iframe) return;
         const IframeDocument = Iframe.contentDocument;
-        if(!IframeDocument) return;
+        if (!IframeDocument) return;
         const element = IframeDocument.querySelector(`#_${currentElement[1]}`);
-        if(!element) return;
-        if(moving){
-            if(direction === "height") setDotPosition("height", e.pageY- element.getBoundingClientRect().top);
+        if (!element) return;
+        if (moving) {
+            if (direction === "height") setDotPosition("height", e.pageY - element.getBoundingClientRect().top);
             else setDotPosition("width", e.pageX - element.getBoundingClientRect().left);
         }
     }
@@ -160,41 +160,41 @@ export default function Editor() {
         else changeStyle("width", Math.round(position / (window.innerWidth / 100)), "vw", true, currentElement[1], currentElement[2]);
     }
 
-    function onPointerMoveMargin(e: any, direction: string){
+    function onPointerMoveMargin(e: any, direction: string) {
         let dot;
-        if(direction === "top") dot = document.querySelector(".margin-border-top-dot");
-        else if(direction === "bottom") dot = document.querySelector(".margin-border-bottom-dot");
-        else if(direction === "left") dot = document.querySelector(".margin-border-left-dot");
+        if (direction === "top") dot = document.querySelector(".margin-border-top-dot");
+        else if (direction === "bottom") dot = document.querySelector(".margin-border-bottom-dot");
+        else if (direction === "left") dot = document.querySelector(".margin-border-left-dot");
         else dot = document.querySelector(".margin-border-right-dot");
         dot?.setPointerCapture(e.pointerId);
         const Iframe = document.querySelector("iframe");
-        if(!Iframe) return;
+        if (!Iframe) return;
         const IframeDocument = Iframe.contentDocument;
-        if(!IframeDocument) return;
+        if (!IframeDocument) return;
         const element = IframeDocument.querySelector(`#_${currentElement[1]}`);
-        if(!element) return;
+        if (!element) return;
         const elementRect = element.getBoundingClientRect();
-        if(holding){
+        if (holding) {
             setHolding(false);
             setMargin([element.getBoundingClientRect().top, element.getBoundingClientRect().bottom, element.getBoundingClientRect().left, element.getBoundingClientRect().right])
         }
-        if(moving){
+        if (moving) {
             const marginMarker = document.querySelector(".custom-border-margin-marker");
-            if(!marginMarker) return;
-            if(direction === "top") {
-                setMarginDotPosition("top", e.pageY-margin[0] );
+            if (!marginMarker) return;
+            if (direction === "top") {
+                setMarginDotPosition("top", e.pageY - margin[0]);
                 marginMarker.style = `bottom: ${element.clientHeight}px; left: ${elementRect.left}px; width: ${elementRect.width}px; height: ${currentElement[2]["margin-top"][0]}${currentElement[2]["margin-top"][1]}; opacity: 1;`
-        }
-            else if(direction === "bottom") {
-                setMarginDotPosition("bottom", e.pageY- margin[1])
+            }
+            else if (direction === "bottom") {
+                setMarginDotPosition("bottom", e.pageY - margin[1])
                 marginMarker.style = `top: ${element.clientHeight}px; left: ${elementRect.left}px; width: ${elementRect.width}px; height: ${currentElement[2]["margin-bottom"][0]}${currentElement[2]["margin-bottom"][1]}; opacity: 1;`
             }
-            else if(direction === "left") {
+            else if (direction === "left") {
                 setMarginDotPosition("left", e.pageX - margin[2])
                 marginMarker.style = `top: 0px; left: 0px; width: ${currentElement[2]["margin-left"][0]}${currentElement[2]["margin-left"][1]}; height: ${elementRect.height}px; opacity: 1; transform: translateX(${currentElement[2]["margin-left"][0] * -1}${currentElement[2]["margin-left"][1]})`
             }
             else {
-                setMarginDotPosition("right", margin[3]-e.pageX )
+                setMarginDotPosition("right", margin[3] - e.pageX)
                 marginMarker.style = `top: 0px; left: ${element.clientWidth}px; width: ${currentElement[2]["margin-right"][0]}${currentElement[2]["margin-right"][1]}; height: ${elementRect.height}px; opacity: 1;`
             };
         }
@@ -202,46 +202,46 @@ export default function Editor() {
 
     function setMarginDotPosition(css: string, position: number) {
         if (css === "top") changeStyle("margin-top", Math.round(position / (window.innerHeight / 100)), "vh", true, currentElement[1], currentElement[2])
-        else if(css === "bottom") changeStyle("margin-bottom", Math.round(position / (window.innerHeight / 100)), "vh", true, currentElement[1], currentElement[2]);
-        else if(css === "left") changeStyle("margin-left", Math.round(position / (window.innerWidth / 100)), "vw", true, currentElement[1], currentElement[2]);
+        else if (css === "bottom") changeStyle("margin-bottom", Math.round(position / (window.innerHeight / 100)), "vh", true, currentElement[1], currentElement[2]);
+        else if (css === "left") changeStyle("margin-left", Math.round(position / (window.innerWidth / 100)), "vw", true, currentElement[1], currentElement[2]);
         else changeStyle("margin-right", Math.round(position / (window.innerWidth / 100)), "vw", true, currentElement[1], currentElement[2]);
     }
 
-    function onPointerMovePadding(e: any, direction: string){
+    function onPointerMovePadding(e: any, direction: string) {
         let dot;
-        if(direction === "top") dot = document.querySelector(".padding-border-top-dot");
-        else if(direction === "bottom") dot = document.querySelector(".padding-border-bottom-dot");
-        else if(direction === "left") dot = document.querySelector(".padding-border-left-dot");
+        if (direction === "top") dot = document.querySelector(".padding-border-top-dot");
+        else if (direction === "bottom") dot = document.querySelector(".padding-border-bottom-dot");
+        else if (direction === "left") dot = document.querySelector(".padding-border-left-dot");
         else dot = document.querySelector(".padding-border-right-dot");
         dot?.setPointerCapture(e.pointerId);
         const Iframe = document.querySelector("iframe");
-        if(!Iframe) return;
+        if (!Iframe) return;
         const IframeDocument = Iframe.contentDocument;
-        if(!IframeDocument) return;
+        if (!IframeDocument) return;
         const element = IframeDocument.querySelector(`#_${currentElement[1]}`);
-        if(!element) return;
+        if (!element) return;
         const elementRect = element.getBoundingClientRect();
-        if(holding){
+        if (holding) {
             setHolding(false);
             setPadding([elementRect.top, elementRect.bottom, elementRect.left, elementRect.right])
         }
-        if(moving){
+        if (moving) {
             const paddingMarker = document.querySelector(".custom-border-padding-marker");
-            if(!paddingMarker) return;
-            if(direction === "top") {
-                setPaddingDotPosition("top", e.pageY-padding[0] )
+            if (!paddingMarker) return;
+            if (direction === "top") {
+                setPaddingDotPosition("top", e.pageY - padding[0])
                 paddingMarker.style = `top: 0px; left: ${elementRect.left}px; width: ${elementRect.width}px; height: ${currentElement[2]["padding-top"][0]}${currentElement[2]["padding-top"][1]}; opacity: 1;`
             }
-            else if(direction === "bottom") {
-                setPaddingDotPosition("bottom", e.pageY- padding[1])
+            else if (direction === "bottom") {
+                setPaddingDotPosition("bottom", e.pageY - padding[1])
                 paddingMarker.style = `bottom: 0px; left: ${elementRect.left}px; width: ${elementRect.width}px; height: ${currentElement[2]["padding-bottom"][0]}${currentElement[2]["padding-bottom"][1]}; opacity: 1;`
             }
-            else if(direction === "left") {
+            else if (direction === "left") {
                 setPaddingDotPosition("left", e.pageX - padding[2])
                 paddingMarker.style = `top: 0px; left: 0px; width: ${currentElement[2]["padding-left"][0]}${currentElement[2]["padding-left"][1]}; height: ${elementRect.height}px; opacity: 1;`
             }
             else {
-                setPaddingDotPosition("right", padding[3]-e.pageX )
+                setPaddingDotPosition("right", padding[3] - e.pageX)
                 paddingMarker.style = `top: 0px; right: 0px; width: ${currentElement[2]["padding-right"][0]}${currentElement[2]["padding-right"][1]}; height: ${elementRect.height}px; opacity: 1;`
             }
         }
@@ -249,8 +249,8 @@ export default function Editor() {
 
     function setPaddingDotPosition(css: string, position: number) {
         if (css === "top") changeStyle("padding-top", Math.round(position / (window.innerHeight / 100)), "vh", true, currentElement[1], currentElement[2])
-        else if(css === "bottom") changeStyle("padding-bottom", Math.round(position / (window.innerHeight / 100)), "vh", true, currentElement[1], currentElement[2]);
-        else if(css === "left") changeStyle("padding-left", Math.round(position / (window.innerWidth / 100)), "vw", true, currentElement[1], currentElement[2]);
+        else if (css === "bottom") changeStyle("padding-bottom", Math.round(position / (window.innerHeight / 100)), "vh", true, currentElement[1], currentElement[2]);
+        else if (css === "left") changeStyle("padding-left", Math.round(position / (window.innerWidth / 100)), "vw", true, currentElement[1], currentElement[2]);
         else changeStyle("padding-right", Math.round(position / (window.innerWidth / 100)), "vw", true, currentElement[1], currentElement[2]);
     }
 
@@ -261,8 +261,8 @@ export default function Editor() {
     function changeStyle(css: string, value: string, unit = "", double = false, index: number, object: any) {
         const newStyle = [...style];
         const newElements = [...elements];
-        if(newElements.length !== elementsLength.current) return;
-        if(currentElement[1] !== currentElement[1]) return;
+        if (newElements.length !== elementsLength.current) return;
+        if (currentElement[1] !== currentElement[1]) return;
         const styleIdxArray: string[] = newStyle[newStyle.indexOf(`#_${currentElement[1]}`) + 1];
         if (styleIdxArray.includes(`${css}: ${value}${unit};`)) return;
         try {
@@ -335,8 +335,8 @@ export default function Editor() {
     })
 
     //remove elements
-    function deleteCurrentElement(){
-        if(currentElement[0] === "none") return;
+    function deleteCurrentElement() {
+        if (currentElement[0] === "none") return;
         const currentIdx: number = currentElement[1];
         const newHTML = [...html];
         const newElements = [...elements];
@@ -345,39 +345,39 @@ export default function Editor() {
         newStyle.splice(newStyleIdx, 2);
         newHTML[2][1].splice(currentIdx, 1);
         newElements.splice(currentIdx, 1);
-        for(let i = currentIdx; i<newElements.length; i++){
+        for (let i = currentIdx; i < newElements.length; i++) {
             newElements[i][1] -= 1;
         }
         let j = currentIdx;
-        for(let i = newStyleIdx; i<newStyle.length; i+=2){
+        for (let i = newStyleIdx; i < newStyle.length; i += 2) {
             newStyle[i] = `#_${newElements[j][1]}`;
             j++;
         }
-        for(let i = currentIdx; i<newHTML[2][1].length; i++){
+        for (let i = currentIdx; i < newHTML[2][1].length; i++) {
             newHTML[2][1][i][0] = `<h1 id="_${i}" class="element ${i}">`;
         }
         setStyle(newStyle);
         setHtml(newHTML);
         setElements(newElements);
-        if(newElements.length !== 0){
-            setCurrentElement(newElements[newElements.length-1]);
-        }else{
+        if (newElements.length !== 0) {
+            setCurrentElement(newElements[newElements.length - 1]);
+        } else {
             setCurrentElement(["none", 0, {}])
         }
         makeBorderBoxInvisible();
         elementsLength.current -= 1;
     }
 
-    function moveCurrentElement(direction: string){
+    function moveCurrentElement(direction: string) {
         const currentIdx: number = currentElement[1];
         let index: number = 0;
-        if(direction === "up"){
+        if (direction === "up") {
             //up
-            if(currentIdx === 0 || currentElement[0] === "none") return;
+            if (currentIdx === 0 || currentElement[0] === "none") return;
             index = -1
-        }else{
+        } else {
             //down
-            if(currentIdx === elementsLength.current - 1 || currentElement[0] === "none") return;
+            if (currentIdx === elementsLength.current - 1 || currentElement[0] === "none") return;
             index = 1
         }
         const newHTML = [...html];
@@ -385,10 +385,10 @@ export default function Editor() {
         const newStyle = [...style];
         const newStyleIdx = newStyle.indexOf(`#_${currentIdx}`);
         const newStyleIdx2 = newStyle.indexOf(`#_${currentIdx + index}`);
-        const newStyleContent = newStyle[newStyleIdx+1];
-        const newStyleContent2 = newStyle[newStyleIdx2+1];
-        newStyle[newStyleIdx+1] = newStyleContent2;
-        newStyle[newStyleIdx2+1] = newStyleContent;
+        const newStyleContent = newStyle[newStyleIdx + 1];
+        const newStyleContent2 = newStyle[newStyleIdx2 + 1];
+        newStyle[newStyleIdx + 1] = newStyleContent2;
+        newStyle[newStyleIdx2 + 1] = newStyleContent;
         const newHTMLContent = newHTML[2][1][currentIdx];
         const newHTMLContent2 = newHTML[2][1][currentIdx + index];
         newHTML[2][1][currentIdx] = newHTMLContent2;
@@ -399,14 +399,14 @@ export default function Editor() {
         const newElementsContent2 = newElements[currentIdx + index];
         newElements[currentIdx] = newElementsContent2;
         newElements[currentIdx + index] = newElementsContent;
-        if(direction === "up"){
+        if (direction === "up") {
             newElements[currentIdx][1] += 1;
             newElements[currentIdx + index][1] -= 1;
-        }else{
+        } else {
             newElements[currentIdx][1] -= 1;
             newElements[currentIdx + index][1] += 1;
         }
-        
+
         setStyle(newStyle);
         setHtml(newHTML);
         setElements(newElements);
@@ -428,9 +428,21 @@ export default function Editor() {
         const HTMLPosition = newHTML[position[0]][position[1]];
         HTMLPosition.push([`<p id="_${HTMLPosition.length}" class="element ${HTMLPosition.length}">`, content, `</p>`]);
         setStyle([...style, `#_${HTMLPosition.length - 1}`, []])
-        setElements([...elements, ["Paragraph", HTMLPosition.length- 1, { "text": "Paragraph" }]])
+        setElements([...elements, ["Paragraph", HTMLPosition.length - 1, { "text": "Paragraph" }]])
         elementsLength.current += 1;
         setHtml(newHTML);
+    }
+
+    const handleDownload = () => {
+        const element = document.createElement("a");
+        const iframe = document.querySelector("iframe");
+        if(!iframe?.contentDocument?.documentElement.innerHTML) return;
+        const Iframehtml: string = iframe?.contentDocument?.documentElement.innerHTML;
+        const file = new Blob([Iframehtml], { type: 'text/plain' });
+        element.href = URL.createObjectURL(file);
+        element.download = "index.html";
+        document.body.appendChild(element);
+        element.click();
     }
 
     return (
@@ -444,32 +456,33 @@ export default function Editor() {
                     <button className="delete-element-button" onClick={() => deleteCurrentElement()}>Delete Current Element</button>
                     <button className="move-element-button move-element-button-up" onClick={() => moveCurrentElement("up")}>Move Current Element UP</button>
                     <button className="move-element-button move-element-button-down" onClick={() => moveCurrentElement("down")}>Move Current Element DOWN</button>
+                    <button className="download-html" onClick={ () => handleDownload()}>Download HTML File</button>
                 </div>
             </Draggable>
             <div className="custom-border">
                 <div className="custom-border-relative">
-                    <div className="custom-border-dot custom-border-right-dot" onPointerDown={() => {setMoving(true)}} onPointerMove={(e) => onPointerMove(e, "width")} onPointerUp={() => setMoving(false)} />
-                    <div className="custom-border-dot custom-border-bottom-dot" onPointerDown={() => {setMoving(true)}} onPointerMove={(e) => onPointerMove(e, "height")} onPointerUp={() => setMoving(false)} />
-                    <div className="custom-border-dot custom-border-right-dot custom-border-right-inner-dot" onPointerDown={() => {setMoving(true)}} onPointerMove={(e) => onPointerMove(e, "width")} onPointerUp={() => setMoving(false)} />
-                    <div className="custom-border-dot custom-border-bottom-dot custom-border-bottom-inner-dot" onPointerDown={() => {setMoving(true)}} onPointerMove={(e) => onPointerMove(e, "height")} onPointerUp={() => setMoving(false)} />
+                    <div className="custom-border-dot custom-border-right-dot" onPointerDown={() => { setMoving(true) }} onPointerMove={(e) => onPointerMove(e, "width")} onPointerUp={() => setMoving(false)} />
+                    <div className="custom-border-dot custom-border-bottom-dot" onPointerDown={() => { setMoving(true) }} onPointerMove={(e) => onPointerMove(e, "height")} onPointerUp={() => setMoving(false)} />
+                    <div className="custom-border-dot custom-border-right-dot custom-border-inner-dot custom-border-right-inner-dot" onPointerDown={() => { setMoving(true) }} onPointerMove={(e) => onPointerMove(e, "width")} onPointerUp={() => setMoving(false)} />
+                    <div className="custom-border-dot custom-border-bottom-dot custom-border-inner-dot custom-border-bottom-inner-dot" onPointerDown={() => { setMoving(true) }} onPointerMove={(e) => onPointerMove(e, "height")} onPointerUp={() => setMoving(false)} />
                     <></>
-                    <div className="custom-border-dot custom-margin-dot custom-border-top-dot margin-border-top-dot" onPointerDown={() => {setMoving(true)}} onPointerMove={(e) => onPointerMoveMargin(e, "top")} onPointerUp={() => {setMoving(false); setHolding(true)}}/>
-                    <div className="custom-border-dot custom-margin-dot custom-border-top-inner-dot margin-border-top-inner-dot" onPointerDown={() => {setMoving(true)}} onPointerMove={(e) => onPointerMoveMargin(e, "top")} onPointerUp={() => {setMoving(false); setHolding(true)}}/>
-                    <div className="custom-border-dot custom-margin-dot custom-border-right-dot margin-border-right-dot" onPointerDown={() => {setMoving(true)}} onPointerMove={(e) => onPointerMoveMargin(e, "right")} onPointerUp={() => {setMoving(false); setHolding(true)}}/>
-                    <div className="custom-border-dot custom-margin-dot custom-border-right-inner-dot margin-border-right-inner-dot" onPointerDown={() => {setMoving(true)}} onPointerMove={(e) => onPointerMoveMargin(e, "right")} onPointerUp={() => {setMoving(false); setHolding(true)}}/>
-                    <div className="custom-border-dot custom-margin-dot custom-border-left-dot margin-border-left-dot" onPointerDown={() => {setMoving(true)}} onPointerMove={(e) => onPointerMoveMargin(e, "left")} onPointerUp={() => {setMoving(false); setHolding(true)}}/>
-                    <div className="custom-border-dot custom-margin-dot custom-border-left-inner-dot margin-border-left-inner-dot" onPointerDown={() => {setMoving(true)}} onPointerMove={(e) => onPointerMoveMargin(e, "left")} onPointerUp={() => {setMoving(false); setHolding(true)}}/>
-                    <div className="custom-border-dot custom-margin-dot custom-border-bottom-dot margin-border-bottom-inner-dot" onPointerDown={() => {setMoving(true)}} onPointerMove={(e) => onPointerMoveMargin(e, "bottom")} onPointerUp={() => {setMoving(false); setHolding(true)}}/>
-                    <div className="custom-border-dot custom-margin-dot custom-border-bottom-inner-dot margin-border-bottom-dot" onPointerDown={() => {setMoving(true)}} onPointerMove={(e) => onPointerMoveMargin(e, "bottom")} onPointerUp={() => {setMoving(false); setHolding(true)}}/>
+                    <div className="custom-border-dot custom-margin-dot custom-border-top-dot margin-border-top-dot" onPointerDown={() => { setMoving(true) }} onPointerMove={(e) => onPointerMoveMargin(e, "top")} onPointerUp={() => { setMoving(false); setHolding(true) }} />
+                    <div className="custom-border-dot custom-margin-dot custom-border-top-inner-dot margin-border-top-inner-dot" onPointerDown={() => { setMoving(true) }} onPointerMove={(e) => onPointerMoveMargin(e, "top")} onPointerUp={() => { setMoving(false); setHolding(true) }} />
+                    <div className="custom-border-dot custom-margin-dot custom-border-right-dot margin-border-right-dot" onPointerDown={() => { setMoving(true) }} onPointerMove={(e) => onPointerMoveMargin(e, "right")} onPointerUp={() => { setMoving(false); setHolding(true) }} />
+                    <div className="custom-border-dot custom-margin-dot custom-border-right-inner-dot margin-border-right-inner-dot" onPointerDown={() => { setMoving(true) }} onPointerMove={(e) => onPointerMoveMargin(e, "right")} onPointerUp={() => { setMoving(false); setHolding(true) }} />
+                    <div className="custom-border-dot custom-margin-dot custom-border-left-dot margin-border-left-dot" onPointerDown={() => { setMoving(true) }} onPointerMove={(e) => onPointerMoveMargin(e, "left")} onPointerUp={() => { setMoving(false); setHolding(true) }} />
+                    <div className="custom-border-dot custom-margin-dot custom-border-left-inner-dot margin-border-left-inner-dot" onPointerDown={() => { setMoving(true) }} onPointerMove={(e) => onPointerMoveMargin(e, "left")} onPointerUp={() => { setMoving(false); setHolding(true) }} />
+                    <div className="custom-border-dot custom-margin-dot custom-border-bottom-dot margin-border-bottom-inner-dot" onPointerDown={() => { setMoving(true) }} onPointerMove={(e) => onPointerMoveMargin(e, "bottom")} onPointerUp={() => { setMoving(false); setHolding(true) }} />
+                    <div className="custom-border-dot custom-margin-dot custom-border-bottom-inner-dot margin-border-bottom-dot" onPointerDown={() => { setMoving(true) }} onPointerMove={(e) => onPointerMoveMargin(e, "bottom")} onPointerUp={() => { setMoving(false); setHolding(true) }} />
                     <></>
-                    <div className="custom-border-dot custom-padding-dot custom-border-top-dot padding-border-top-dot" onPointerDown={() => {setMoving(true)}} onPointerMove={(e) => onPointerMovePadding(e, "top")} onPointerUp={() => {setMoving(false); setHolding(true)}}/>
-                    <div className="custom-border-dot custom-padding-dot custom-border-top-inner-dot padding-border-top-inner-dot" onPointerDown={() => {setMoving(true)}} onPointerMove={(e) => onPointerMovePadding(e, "top")} onPointerUp={() => {setMoving(false); setHolding(true)}}/>
-                    <div className="custom-border-dot custom-padding-dot custom-border-right-dot padding-border-right-dot" onPointerDown={() => {setMoving(true)}} onPointerMove={(e) => onPointerMovePadding(e, "right")} onPointerUp={() => {setMoving(false); setHolding(true)}}/>
-                    <div className="custom-border-dot custom-padding-dot custom-border-right-inner-dot padding-border-right-inner-dot" onPointerDown={() => {setMoving(true)}} onPointerMove={(e) => onPointerMovePadding(e, "right")} onPointerUp={() => {setMoving(false); setHolding(true)}}/>
-                    <div className="custom-border-dot custom-padding-dot custom-border-left-dot padding-border-left-dot" onPointerDown={() => {setMoving(true)}} onPointerMove={(e) => onPointerMovePadding(e, "left")} onPointerUp={() => {setMoving(false); setHolding(true)}}/>
-                    <div className="custom-border-dot custom-padding-dot custom-border-left-inner-dot padding-border-left-inner-dot" onPointerDown={() => {setMoving(true)}} onPointerMove={(e) => onPointerMovePadding(e, "left")} onPointerUp={() => {setMoving(false); setHolding(true)}}/>
-                    <div className="custom-border-dot custom-padding-dot custom-border-bottom-dot padding-border-bottom-inner-dot" onPointerDown={() => {setMoving(true)}} onPointerMove={(e) => onPointerMovePadding(e, "bottom")} onPointerUp={() => {setMoving(false); setHolding(true)}}/>
-                    <div className="custom-border-dot custom-padding-dot custom-border-bottom-inner-dot padding-border-bottom-dot" onPointerDown={() => {setMoving(true)}} onPointerMove={(e) => onPointerMovePadding(e, "bottom")} onPointerUp={() => {setMoving(false); setHolding(true)}}/>
+                    <div className="custom-border-dot custom-padding-dot custom-border-top-dot padding-border-top-dot" onPointerDown={() => { setMoving(true) }} onPointerMove={(e) => onPointerMovePadding(e, "top")} onPointerUp={() => { setMoving(false); setHolding(true) }} />
+                    <div className="custom-border-dot custom-padding-dot custom-border-top-inner-dot padding-border-top-inner-dot" onPointerDown={() => { setMoving(true) }} onPointerMove={(e) => onPointerMovePadding(e, "top")} onPointerUp={() => { setMoving(false); setHolding(true) }} />
+                    <div className="custom-border-dot custom-padding-dot custom-border-right-dot padding-border-right-dot" onPointerDown={() => { setMoving(true) }} onPointerMove={(e) => onPointerMovePadding(e, "right")} onPointerUp={() => { setMoving(false); setHolding(true) }} />
+                    <div className="custom-border-dot custom-padding-dot custom-border-right-inner-dot padding-border-right-inner-dot" onPointerDown={() => { setMoving(true) }} onPointerMove={(e) => onPointerMovePadding(e, "right")} onPointerUp={() => { setMoving(false); setHolding(true) }} />
+                    <div className="custom-border-dot custom-padding-dot custom-border-left-dot padding-border-left-dot" onPointerDown={() => { setMoving(true) }} onPointerMove={(e) => onPointerMovePadding(e, "left")} onPointerUp={() => { setMoving(false); setHolding(true) }} />
+                    <div className="custom-border-dot custom-padding-dot custom-border-left-inner-dot padding-border-left-inner-dot" onPointerDown={() => { setMoving(true) }} onPointerMove={(e) => onPointerMovePadding(e, "left")} onPointerUp={() => { setMoving(false); setHolding(true) }} />
+                    <div className="custom-border-dot custom-padding-dot custom-border-bottom-dot padding-border-bottom-inner-dot" onPointerDown={() => { setMoving(true) }} onPointerMove={(e) => onPointerMovePadding(e, "bottom")} onPointerUp={() => { setMoving(false); setHolding(true) }} />
+                    <div className="custom-border-dot custom-padding-dot custom-border-bottom-inner-dot padding-border-bottom-dot" onPointerDown={() => { setMoving(true) }} onPointerMove={(e) => onPointerMovePadding(e, "bottom")} onPointerUp={() => { setMoving(false); setHolding(true) }} />
                     <></>
                     <div className="custom-border-margin-marker" />
                     <div className="custom-border-padding-marker" />
@@ -482,7 +495,7 @@ export default function Editor() {
                     <ElementHub element={currentElement[0]} index={currentElement[1]} object={currentElement[2]} changeStyle={changeStyle} resetStyle={resetStyle} changeText={changeText} makeBorderBoxInvisible={makeBorderBoxInvisible} />
                 </div>
             </Draggable>
-
+            
         </div>
     )
 }

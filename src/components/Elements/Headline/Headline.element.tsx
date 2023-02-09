@@ -17,6 +17,9 @@ import Padding from "../../Styles/Padding.style.component";
 import Border from "../../Styles/Border.style.component";
 import Opacity from "../../Styles/Opacity.style.component";
 import Collapsible from "react-collapsible";
+import CustomProperty from "../../Styles/CustomProperty.style.component";
+import Filter from "../../Styles/Filter.style.component";
+import BGImage from "../../Styles/BGImage.style.component";
 
 export default function Headline({index, object, text = "Default", changeStyle, resetStyle ,changeText, makeBorderBoxInvisible }) {
 
@@ -36,6 +39,9 @@ export default function Headline({index, object, text = "Default", changeStyle, 
 
     return (
         <div className="elements-container">
+            <Collapsible trigger="Custom" transitionTime={200} triggerTagName="div" triggerClassName="elements-title">
+                <CustomProperty object={object} changeStyle={changeStyleHandler} resetStyle={resetStyleHandler}/>
+            </Collapsible>
             <Collapsible trigger="Typography" transitionTime={200} triggerTagName="div" triggerClassName="elements-title">
                 <Text text={text} changeText={changeTextHandler}/>
                 <TextAlign object={object} changeStyle={changeStyleHandler}/>
@@ -68,6 +74,12 @@ export default function Headline({index, object, text = "Default", changeStyle, 
             <Collapsible trigger="Spacing" transitionTime={200} triggerTagName="div" triggerClassName="elements-title">
                 <Margin object={object} changeStyle={changeStyleHandler} resetStyle={resetStyleHandler} customBorder={makeBorderBoxInvisible}/>
                 <Padding object={object} changeStyle={changeStyleHandler} resetStyle={resetStyleHandler} customBorder={makeBorderBoxInvisible}/>
+            </Collapsible>
+            <Collapsible trigger="Filter" transitionTime={200} triggerTagName="div" triggerClassName="elements-title">
+                <Filter object={object} changeStyle={changeStyleHandler} resetStyle={resetStyleHandler}/>
+            </Collapsible>
+            <Collapsible trigger="Background-image" transitionTime={200} triggerTagName="div" triggerClassName="elements-title">
+                <BGImage object={object} changeStyle={changeStyleHandler} resetStyle={resetStyleHandler}/>
             </Collapsible>
         </div>
     )
