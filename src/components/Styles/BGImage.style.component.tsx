@@ -32,7 +32,12 @@ export default function BGImage({object, changeStyle, resetStyle}){
             <input className="bg-image-input" id="bg-image" />
             <button className="bg-image-submit-button" onClick={addImage}>Submit</button>
             <label className="bg-image-upload-label" htmlFor="bg-image-file">Upload</label>
-            <input type="file" accept="image/*" name="bg-image-upload" id="bg-image-file" onChange={loadFile}/>
+            <input 
+                type="file" 
+                accept="image/*" 
+                name="bg-image-upload" 
+                id="bg-image-file" 
+                onChange={loadFile}/>
             <div>
                 <button className="bg-image-remove" onClick={removeImage}>Reset</button>
                 <div className="bg-image-options">

@@ -1,4 +1,5 @@
 import {useState} from "react";
+    
 
 export default function Filter({object, changeStyle, resetStyle}){
     const [filter, setFilter] = useState("none");
@@ -24,7 +25,9 @@ export default function Filter({object, changeStyle, resetStyle}){
         <div className="filter-container">
             <div className="filter">
                 <label className="filter-label" htmlFor="filter">Filter: </label>
-                <select className="filter-select" id="filter" onChange={(e) => changeFilter(e.target.value)}>
+                <select className="filter-select" 
+                    id="filter" 
+                    onChange={(e) => changeFilter(e.target.value)}>
                     <option value="none">None</option>
                     <option value="blur">Blur</option>
                     <option value="brightness">Brightness</option>
@@ -37,7 +40,10 @@ export default function Filter({object, changeStyle, resetStyle}){
                     <option value="sepia">Sepia</option>
                 </select>
                 <label className="filter-value-label" htmlFor="filter-value">Value: </label>
-                <input className="filter-value-input" id="filter-value" type="number" onChange={(e) => changeFilterValue(e.target.value)} />
+                <input className="filter-value-input" 
+                    id="filter-value" 
+                    type="number" 
+                    onChange={(e) => changeFilterValue(e.target.value)} />
             </div>
             <button className="filter-reset" onClick={resetFilter}>Reset</button>
         </div>

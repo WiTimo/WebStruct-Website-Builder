@@ -55,14 +55,38 @@ export default function CustomMargin({currentElement, changeStyle}){
 
     return(
         <>
-        <div className="custom-border-dot custom-margin-dot custom-border-top-dot margin-border-top-dot" onPointerDown={() => { setMoving(true) }} onPointerMove={(e) => onPointerMoveMargin(e, "top")} onPointerUp={() => { setMoving(false); setHolding(true) }} />
-        <div className="custom-border-dot custom-margin-dot custom-border-top-inner-dot margin-border-top-inner-dot" onPointerDown={() => { setMoving(true) }} onPointerMove={(e) => onPointerMoveMargin(e, "top")} onPointerUp={() => { setMoving(false); setHolding(true) }} />
-        <div className="custom-border-dot custom-margin-dot custom-border-right-dot margin-border-right-dot" onPointerDown={() => { setMoving(true) }} onPointerMove={(e) => onPointerMoveMargin(e, "right")} onPointerUp={() => { setMoving(false); setHolding(true) }} />
-        <div className="custom-border-dot custom-margin-dot custom-border-right-inner-dot margin-border-right-inner-dot" onPointerDown={() => { setMoving(true) }} onPointerMove={(e) => onPointerMoveMargin(e, "right")} onPointerUp={() => { setMoving(false); setHolding(true) }} />
-        <div className="custom-border-dot custom-margin-dot custom-border-left-dot margin-border-left-dot" onPointerDown={() => { setMoving(true) }} onPointerMove={(e) => onPointerMoveMargin(e, "left")} onPointerUp={() => { setMoving(false); setHolding(true) }} />
-        <div className="custom-border-dot custom-margin-dot custom-border-left-inner-dot margin-border-left-inner-dot" onPointerDown={() => { setMoving(true) }} onPointerMove={(e) => onPointerMoveMargin(e, "left")} onPointerUp={() => { setMoving(false); setHolding(true) }} />
-        <div className="custom-border-dot custom-margin-dot custom-border-bottom-dot margin-border-bottom-inner-dot" onPointerDown={() => { setMoving(true) }} onPointerMove={(e) => onPointerMoveMargin(e, "bottom")} onPointerUp={() => { setMoving(false); setHolding(true) }} />
-        <div className="custom-border-dot custom-margin-dot custom-border-bottom-inner-dot margin-border-bottom-dot" onPointerDown={() => { setMoving(true) }} onPointerMove={(e) => onPointerMoveMargin(e, "bottom")} onPointerUp={() => { setMoving(false); setHolding(true) }} />
+        <div className="custom-border-dot custom-margin-dot custom-border-top-dot margin-border-top-dot" 
+            onPointerDown={() => { setMoving(true) }} 
+            onPointerMove={(e) => onPointerMoveMargin(e, "top")} 
+            onPointerUp={() => { setMoving(false); setHolding(true) }} />
+        <div className="custom-border-dot custom-margin-dot custom-border-top-inner-dot margin-border-top-inner-dot" 
+            onPointerDown={() => { setMoving(true) }} 
+            onPointerMove={(e) => onPointerMoveMargin(e, "top")} 
+            onPointerUp={() => { setMoving(false); setHolding(true) }} />
+        <div className="custom-border-dot custom-margin-dot custom-border-right-dot margin-border-right-dot" 
+            onPointerDown={() => { setMoving(true) }} 
+            onPointerMove={(e) => onPointerMoveMargin(e, "right")} 
+            onPointerUp={() => { setMoving(false); setHolding(true) }} />
+        <div className="custom-border-dot custom-margin-dot custom-border-right-inner-dot margin-border-right-inner-dot" 
+            onPointerDown={() => { setMoving(true) }} 
+            onPointerMove={(e) => onPointerMoveMargin(e, "right")} 
+            onPointerUp={() => { setMoving(false); setHolding(true) }} />
+        <div className="custom-border-dot custom-margin-dot custom-border-left-dot margin-border-left-dot" 
+            onPointerDown={() => { setMoving(true) }} 
+            onPointerMove={(e) => onPointerMoveMargin(e, "left")} 
+            onPointerUp={() => { setMoving(false); setHolding(true) }} />
+        <div className="custom-border-dot custom-margin-dot custom-border-left-inner-dot margin-border-left-inner-dot" 
+            onPointerDown={() => { setMoving(true) }} 
+            onPointerMove={(e) => onPointerMoveMargin(e, "left")} 
+            onPointerUp={() => { setMoving(false); setHolding(true) }} />
+        <div className="custom-border-dot custom-margin-dot custom-border-bottom-dot margin-border-bottom-inner-dot" 
+            onPointerDown={() => { setMoving(true) }} 
+            onPointerMove={(e) => onPointerMoveMargin(e, "bottom")} 
+            onPointerUp={() => { setMoving(false); setHolding(true) }} />
+        <div className="custom-border-dot custom-margin-dot custom-border-bottom-inner-dot margin-border-bottom-dot" 
+            onPointerDown={() => { setMoving(true) }} 
+            onPointerMove={(e) => onPointerMoveMargin(e, "bottom")} 
+            onPointerUp={() => { setMoving(false); setHolding(true) }} />
         <div className="custom-border-margin-marker" />
         </>
     )

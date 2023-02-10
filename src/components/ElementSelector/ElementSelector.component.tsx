@@ -11,7 +11,16 @@ export default function ElementSelector({setCurrentElement, elements}) {
     return(
             elements.map((element: string, index: Number) => {
                 return(
-                    <p className="selector-element" onClick={() => changeSelectedTarget(index)} key={index}>{`${element[0]}: ${element[2]["text"].length <= 15 ? element[2]["text"] : element[2]["text"].substring(0,15) +"..."}`}</p>
+                    <p className="selector-element" 
+                    onClick={() => changeSelectedTarget(index)} 
+                    key={index}>
+                        {`
+                        ${element[0]}: 
+                        ${element[2]["text"].length <= 15 ? 
+                        element[2]["text"] : element[2]["text"].substring(0,15)
+                        +"..."}
+                        `}
+                    </p>
                 )
             })
         )

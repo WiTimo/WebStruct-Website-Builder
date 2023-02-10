@@ -1,12 +1,9 @@
 import { useEffect, useState, useRef } from "react";
 import "./Editor.styles.scss";
-import Draggable from 'react-draggable';
 //imports
-import ElementHub from "../ElementHub/ElementHub.component";
-import ElementSelector from "../ElementSelector/ElementSelector.component";
-import CustomPadding from "../CustomSelect/CustomPadding.component";
-import CustomMargin from "../CustomSelect/CustomMargin.component";
-import CustomSize from "../CustomSelect/CustomSize.component";
+import Section_1 from "../Sections/Section_1.component";
+import Section_2 from "../Sections/Section_2.component";
+import Border from "../Sections/Border.component";
 
 
 interface DefaultDomElement{
@@ -75,8 +72,9 @@ export default function Editor() {
         const customBorder: DefaultDomElement = document.querySelector(".custom-border");
         if (!customBorder) return;
         iframeDocument.querySelectorAll(".element").forEach((element) => {
+            const elementRect = element.getBoundingClientRect();
             element.addEventListener("pointerenter", () => {
-                customBorder.style = `left: ${element.getBoundingClientRect().left}px; top: ${element.getBoundingClientRect().top}px; width: ${element.getBoundingClientRect().width + 2}px; height: ${element.getBoundingClientRect().height + 2}px; opacity: 1;`;
+                customBorder.style = `left: ${elementRect.left}px; top: ${elementRect.top}px; width: ${elementRect.width + 2}px; height: ${elementRect.height + 2}px; opacity: 1;`;
                 const dots = document.querySelectorAll(".custom-border-dot");
                 for (let i of dots) {
                     i.style.opacity = "0";
@@ -213,152 +211,37 @@ export default function Editor() {
         customBorder.style.opacity = "0";
     }
 
-    document.addEventListener("keydown", (e) => {
-        if (e.key === "Delete") {
-            deleteCurrentElement();
-        }
-    })
 
-    //remove elements
-    function deleteCurrentElement() {
-        if (currentElement[0] === "none") return;
-        const currentIdx: number = currentElement[1];
-        const newHTML = [...html];
-        const newElements = [...elements];
-        const newStyle = [...style];
-        const newStyleIdx = newStyle.indexOf(`#_${currentIdx}`);
-        newStyle.splice(newStyleIdx, 2);
-        newHTML[2][1].splice(currentIdx, 1);
-        newElements.splice(currentIdx, 1);
-        for (let i = currentIdx; i < newElements.length; i++) {
-            newElements[i][1] -= 1;
-        }
-        let j = currentIdx;
-        for (let i = newStyleIdx; i < newStyle.length; i += 2) {
-            newStyle[i] = `#_${newElements[j][1]}`;
-            j++;
-        }
-        for (let i = currentIdx; i < newHTML[2][1].length; i++) {
-            newHTML[2][1][i][0] = `<h1 id="_${i}" class="element ${i}">`;
-        }
-        setStyle(newStyle);
-        setHtml(newHTML);
-        setElements(newElements);
-        if (newElements.length !== 0) {
-            setCurrentElement(newElements[newElements.length - 1]);
-        } else {
-            setCurrentElement(["none", 0, {}])
-        }
-        makeBorderBoxInvisible();
-        elementsLength.current -= 1;
-    }
-
-    function moveCurrentElement(direction: string) {
-        const currentIdx: number = currentElement[1];
-        let index: number = 0;
-        if (direction === "up") {
-            //up
-            if (currentIdx === 0 || currentElement[0] === "none") return;
-            index = -1
-        } else {
-            //down
-            if (currentIdx === elementsLength.current - 1 || currentElement[0] === "none") return;
-            index = 1
-        }
-        const newHTML = [...html];
-        const newElements = [...elements];
-        const newStyle = [...style];
-        const newStyleIdx = newStyle.indexOf(`#_${currentIdx}`);
-        const newStyleIdx2 = newStyle.indexOf(`#_${currentIdx + index}`);
-        const newStyleContent = newStyle[newStyleIdx + 1];
-        const newStyleContent2 = newStyle[newStyleIdx2 + 1];
-        newStyle[newStyleIdx + 1] = newStyleContent2;
-        newStyle[newStyleIdx2 + 1] = newStyleContent;
-        const newHTMLContent = newHTML[2][1][currentIdx];
-        const newHTMLContent2 = newHTML[2][1][currentIdx + index];
-        newHTML[2][1][currentIdx] = newHTMLContent2;
-        newHTML[2][1][currentIdx + index] = newHTMLContent;
-        newHTML[2][1][currentIdx][0] = `<h1 id="_${currentIdx}" class="element ${currentIdx}">`;
-        newHTML[2][1][currentIdx + index][0] = `<h1 id="_${currentIdx + index}" class="element ${currentIdx + index}">`;
-        const newElementsContent = newElements[currentIdx];
-        const newElementsContent2 = newElements[currentIdx + index];
-        newElements[currentIdx] = newElementsContent2;
-        newElements[currentIdx + index] = newElementsContent;
-        if (direction === "up") {
-            newElements[currentIdx][1] += 1;
-            newElements[currentIdx + index][1] -= 1;
-        } else {
-            newElements[currentIdx][1] -= 1;
-            newElements[currentIdx + index][1] += 1;
-        }
-
-        setStyle(newStyle);
-        setHtml(newHTML);
-        setElements(newElements);
-        setCurrentElement(newElements[currentIdx + index]);
-    }
-
-    //add elements
-    const addH1 = (content: string, position: number[]) => {
-        const newHTML = [...html];
-        const HTMLPosition = newHTML[position[0]][position[1]];
-        HTMLPosition.push([`<h1 id="_${HTMLPosition.length}" class="element ${HTMLPosition.length}">`, content, `</h1>`]);
-        setStyle([...style, `#_${HTMLPosition.length - 1}`, []])
-        setElements([...elements, ["Headline", HTMLPosition.length - 1, { "text": "Headline" }]])
-        elementsLength.current += 1;
-        setHtml(newHTML);
-    }
-    const addP = (content: string, position: number[]) => {
-        const newHTML = [...html];
-        const HTMLPosition = newHTML[position[0]][position[1]];
-        HTMLPosition.push([`<p id="_${HTMLPosition.length}" class="element ${HTMLPosition.length}">`, content, `</p>`]);
-        setStyle([...style, `#_${HTMLPosition.length - 1}`, []])
-        setElements([...elements, ["Paragraph", HTMLPosition.length - 1, { "text": "Paragraph" }]])
-        elementsLength.current += 1;
-        setHtml(newHTML);
-    }
-
-    const handleDownload = () => {
-        const element = document.createElement("a");
-        const iframe = document.querySelector("iframe");
-        if(!iframe?.contentDocument?.documentElement.innerHTML) return;
-        const Iframehtml: string = iframe?.contentDocument?.documentElement.innerHTML;
-        const file = new Blob([Iframehtml], { type: 'text/plain' });
-        element.href = URL.createObjectURL(file);
-        element.download = "index.html";
-        document.body.appendChild(element);
-        element.click();
-    }
+    
 
     return (
         <div className="editor-container">
-            <Draggable handle=".dragable-object-section-1">
-                <div className="section-1">
-                    <div className="dragable-object dragable-object-section-1"></div>
-                    <button className="add-button addH1" onClick={() => addH1("Headline", [2, 1])}>Add Headline</button>
-                    <button className="add-button addP" onClick={() => addP("Text", [2, 1])}>Add Text</button>
-                    <ElementSelector elements={elements} setCurrentElement={setCurrentElement} />
-                    <button className="delete-element-button" onClick={() => deleteCurrentElement()}>Delete Current Element</button>
-                    <button className="move-element-button move-element-button-up" onClick={() => moveCurrentElement("up")}>Move Current Element UP</button>
-                    <button className="move-element-button move-element-button-down" onClick={() => moveCurrentElement("down")}>Move Current Element DOWN</button>
-                    <button className="download-html" onClick={ () => handleDownload()}>Download HTML File</button>
-                </div>
-            </Draggable>
-            <div className="custom-border">
-                <div className="custom-border-relative">
-                    <CustomSize currentElement={currentElement} changeStyle={changeStyle} />
-                    <CustomMargin currentElement={currentElement} changeStyle={changeStyle} />
-                    <CustomPadding currentElement={currentElement} changeStyle={changeStyle} />
-                </div>
-            </div>
+            <Section_1 
+                elements={elements} 
+                setCurrentElement={setCurrentElement} 
+                setElements={setElements} 
+                html={html} 
+                setHtml={setHtml} 
+                style={style} 
+                setStyle={setStyle} 
+                elementsLength={elementsLength} 
+                currentElement={currentElement} 
+                makeBorderBoxInvisible={makeBorderBoxInvisible}
+            />
+            <Border 
+                currentElement={currentElement} 
+                changeStyle={changeStyle}
+            />
             <iframe className="website-showcase-iframe" sandbox="allow-same-origin allow-scripts" frameBorder="0" />
-            <Draggable handle=".dragable-object-section-2">
-                <div className="section-2">
-                    <div className="dragable-object dragable-object-section-2"></div>
-                    <ElementHub element={currentElement[0]} index={currentElement[1]} object={currentElement[2]} changeStyle={changeStyle} resetStyle={resetStyle} changeText={changeText} makeBorderBoxInvisible={makeBorderBoxInvisible} />
-                </div>
-            </Draggable>
-            
+            <Section_2
+                element={currentElement[0]} 
+                index={currentElement[1]} 
+                object={currentElement[2]} 
+                changeStyle={changeStyle} 
+                resetStyle={resetStyle} 
+                changeText={changeText} 
+                makeBorderBoxInvisible={makeBorderBoxInvisible}
+            />
         </div>
     )
 }

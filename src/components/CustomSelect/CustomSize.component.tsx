@@ -28,10 +28,22 @@ export default function CustomSize({currentElement, changeStyle}){
 
     return(
         <>
-        <div className="custom-border-dot custom-border-right-dot" onPointerDown={() => { setMoving(true) }} onPointerMove={(e) => onPointerMove(e, "width")} onPointerUp={() => setMoving(false)} />
-        <div className="custom-border-dot custom-border-bottom-dot" onPointerDown={() => { setMoving(true) }} onPointerMove={(e) => onPointerMove(e, "height")} onPointerUp={() => setMoving(false)} />
-        <div className="custom-border-dot custom-border-right-dot custom-border-inner-dot custom-border-right-inner-dot" onPointerDown={() => { setMoving(true) }} onPointerMove={(e) => onPointerMove(e, "width")} onPointerUp={() => setMoving(false)} />
-        <div className="custom-border-dot custom-border-bottom-dot custom-border-inner-dot custom-border-bottom-inner-dot" onPointerDown={() => { setMoving(true) }} onPointerMove={(e) => onPointerMove(e, "height")} onPointerUp={() => setMoving(false)} />
+        <div className="custom-border-dot custom-border-right-dot" 
+            onPointerDown={() => { setMoving(true) }} 
+            onPointerMove={(e) => onPointerMove(e, "width")} 
+            onPointerUp={() => setMoving(false)} />
+        <div className="custom-border-dot custom-border-bottom-dot" 
+            onPointerDown={() => { setMoving(true) }} 
+            onPointerMove={(e) => onPointerMove(e, "height")} 
+            onPointerUp={() => setMoving(false)} />
+        <div className="custom-border-dot custom-border-right-dot custom-border-inner-dot custom-border-right-inner-dot" 
+            onPointerDown={() => { setMoving(true) }} 
+            onPointerMove={(e) => onPointerMove(e, "width")} 
+            onPointerUp={() => setMoving(false)} />
+        <div className="custom-border-dot custom-border-bottom-dot custom-border-inner-dot custom-border-bottom-inner-dot" 
+            onPointerDown={() => { setMoving(true) }} 
+            onPointerMove={(e) => onPointerMove(e, "height")} 
+            onPointerUp={() => setMoving(false)} />
         </>
     )
 }

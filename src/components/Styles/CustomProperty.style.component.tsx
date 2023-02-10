@@ -29,7 +29,8 @@ export default function CustomProperty({object, changeStyle, resetStyle}){
                 return(
                     <div key={index}>
                         <div className="custom-property">{`${property[0]}: ${property[1]}`}</div>
-                        <button className="custom-property-remove" onClick={() => removeCustomProperty(index)}>X</button>
+                        <button className="custom-property-remove" 
+                            onClick={() => removeCustomProperty(index)}>X</button>
                     </div>
                 )
             })

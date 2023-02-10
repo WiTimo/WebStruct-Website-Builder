@@ -4,7 +4,12 @@ export default function FontWeight({object, changeStyle}){
     return(
         <div className="font-weight-container">
         <label htmlFor="font-weight">Weight: </label>
-            <select name="font-weight" id="font-weight" value={object["font-weight"] ? object["font-weight"] : "normal"} onChange={(e) => changeStyle("font-weight", e.target.value)}>
+            <select 
+                name="font-weight" 
+                id="font-weight" 
+                value={object["font-weight"] ? object["font-weight"] : "normal"} 
+                onChange={(e) => changeStyle("font-weight", 
+                    e.target.value)}>
                 <option value="normal">Normal</option>
                 <option value="100">100</option>
                 <option value="200">200</option>
