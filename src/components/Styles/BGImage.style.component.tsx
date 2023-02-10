@@ -13,7 +13,6 @@ export default function BGImage({object, changeStyle, resetStyle}){
         resetStyle("background-image");
         resetStyle("background-size");
         resetStyle("background-repeat");
-        object["background-image"] = "";
     }
 
     const loadFile = (e: any) => {
@@ -34,10 +33,8 @@ export default function BGImage({object, changeStyle, resetStyle}){
             <button className="bg-image-submit-button" onClick={addImage}>Submit</button>
             <label className="bg-image-upload-label" htmlFor="bg-image-file">Upload</label>
             <input type="file" accept="image/*" name="bg-image-upload" id="bg-image-file" onChange={loadFile}/>
-            {object["background-image"] ? 
             <div>
-                <div className="bg-image">{object["background-image"]}</div>
-                <button className="bg-image-remove" onClick={removeImage}>X</button>
+                <button className="bg-image-remove" onClick={removeImage}>Reset</button>
                 <div className="bg-image-options">
                     <div className="bg-image-size" style={{display: "flex"}}>
                         <button onClick={() => changeStyle("background-size", "auto")}>Auto</button>
@@ -50,7 +47,6 @@ export default function BGImage({object, changeStyle, resetStyle}){
                     </div>
                 </div>
             </div>
-        : null}
         </div>
     )
 }
