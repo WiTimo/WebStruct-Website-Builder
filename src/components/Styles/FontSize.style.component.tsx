@@ -10,19 +10,19 @@ export default function FontSize({object, changeStyle, standard = "32"}){
                 type="range" 
                 value={object["font-size"] ? object["font-size"][0] : standard} 
                 onChange={(e) => changeStyle("font-size", `${e.target.value}`, 
-                    document.querySelector("#font-size-unit-dropdown").value, true)} />
+                    document.querySelector("#font-size-unit-dropdown")?.value, true)} />
             <input 
                 id="font-size" 
                 name="font-size" 
                 type="number" 
                 value={object["font-size"] ? object["font-size"][0] : standard} 
                 onChange={(e) => changeStyle("font-size", `${e.target.value}`, 
-                    document.querySelector("#font-size-unit-dropdown").value, true)} />
+                    document.querySelector("#font-size-unit-dropdown")?.value, true)} />
             <select 
                 name="font-size" 
                 id="font-size-unit-dropdown" 
                 value={object["font-size"] ? object["font-size"][1] : "px"} 
-                onChange={(e) => changeStyle("font-size", `${document.querySelector("#font-size").value}`, 
+                onChange={(e) => changeStyle("font-size", `${document.querySelector("#font-size")?.value}`, 
                     e.target.value, true)}>
                 <option value="px">px</option>
                 <option value="pt">pt</option>
