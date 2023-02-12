@@ -1,16 +1,22 @@
 @import url("https://fonts.googleapis.com/css2?family=Ubuntu&display=swap");
 
+html {
+  font-size: calc(0.75rem + 0.1vw);
+}
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-family: "Ubuntu", sans-serif;
+  font-size: 1rem;
 }
 
 :root {
-  --background-color: #d3d3d3;
-  --text-color: #f5f5f5;
-  --section-background-color: #323232;
+  --background-color: #0a192f;
+  --text-color: #ccd6f6;
+  --section-background-color: #0a192f;
+  --dragable-color: #2c4770;
 }
 
 div::-webkit-scrollbar-track {
@@ -27,4 +33,10 @@ div::-webkit-scrollbar {
 div::-webkit-scrollbar-thumb {
   -webkit-box-shadow: inset 0 0 6px rgb(0, 140, 255);
   background-color: #555;
+}
+
+@media only screen and (min-width: 2000px) {
+  html {
+    font-size: calc(0.75rem + 0.4vw);
+  }
 }

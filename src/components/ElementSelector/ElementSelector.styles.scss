@@ -1,5 +1,27 @@
 .selector-element {
   overflow: auto;
   white-space: nowrap;
-  margin-top: 5px;
+  margin: 4px;
+  margin-left: 15px;
+  padding: 5px;
+  display: inline-block;
+  background-color: #103163;
+  border-radius: 5px;
+  font-size: 1.3em;
+  width: fit-content;
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.active-selector-element {
+  border-right: solid lightgreen 5px;
+}
+
+@media only screen and (min-width: 2000px) {
+  .selector-element {
+    font-size: 1.1em;
+    margin-top: 7px;
+    height: 3vh;
+  }
 }

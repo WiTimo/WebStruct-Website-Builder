@@ -1,0 +1,206 @@
+.last-section-extender {
+  width: 100%;
+  height: 15vh;
+}
+
+.std-input {
+  width: 60%;
+  height: 100%;
+  border: none;
+  outline: none;
+  background-color: #103163;
+  color: var(--text-color);
+  border: solid black 2px;
+  padding-left: 0.3em;
+  &:focus {
+    background-color: #1e4f99;
+    outline: none;
+  }
+}
+
+.std-button {
+  min-width: 4vw;
+  min-height: 4vh;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  background-color: #103163;
+  color: var(--text-color);
+  border: solid black 2px;
+  &:hover {
+    background-color: #1e4f99;
+    cursor: pointer;
+  }
+}
+
+//----------------------------------------------Change Text----------------------------------------------
+.text-container {
+  height: 10vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: #103163 solid 3px;
+  textarea {
+    padding: 0.3em;
+    transition: 200ms;
+    resize: none;
+    outline: none;
+    border: none;
+    background-color: #103163;
+    color: var(--text-color);
+    &:focus {
+      background-color: #1e4f99;
+      outline: none;
+    }
+  }
+}
+//----------------------------------------------Custom Property Styles----------------------------------------------
+.custom-property-container {
+  min-height: 10vh;
+  overflow-y: auto;
+  .custom-property-cont-both {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    height: 3vh;
+    margin-right: 1em;
+    gap: 0.5em;
+  }
+  .custom-property-cont-1 {
+    margin-top: 0.5em;
+  }
+  .custom-property-button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: fit-content;
+    margin-top: 0.4em;
+  }
+  .custom-property-display-container {
+    opacity: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    height: max-content;
+    padding: 0.5em 0.3em 0.5em 0.5em;
+    border-radius: 20px;
+    gap: 0.5em;
+    width: min-content;
+    min-width: 90%;
+    margin: 0.4em 0 0 0.3em;
+    border: #103163 solid 3px;
+  }
+  .custom-property-item-display {
+    display: flex;
+    gap: 0.5em;
+  }
+  .custom-property-remove {
+    width: 1.5em;
+    height: 1.2em;
+    &:hover {
+      fill: red;
+      cursor: pointer;
+    }
+  }
+}
+//----------------------------------------------Text Style----------------------------------------------
+.text-style-container {
+  height: 5vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  gap: 2em;
+  .text-align-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1em;
+    .align-button {
+      width: 2em;
+      height: 2em;
+      border: none;
+      outline: none;
+      color: var(--text-color);
+      border: solid black 2px;
+      &:hover {
+        cursor: pointer;
+      }
+    }
+    .text-decoration-active {
+      fill: green;
+    }
+  }
+  .text-decoration-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5em;
+    padding: 0.5em;
+    border-radius: 10px;
+    .decoration-button {
+      font-size: 1.2em;
+      &:hover {
+        cursor: pointer;
+      }
+    }
+
+    .text-decoration-line-container {
+      display: flex;
+      gap: 0.3em;
+      .decoration-button-line-underline {
+        margin-top: 0.2em;
+      }
+      .decoration-button-line-through {
+        font-size: 1.6em;
+      }
+      .decoration-button-weight-bold {
+        font-size: 1.6em;
+      }
+      .text-decoration-active {
+        fill: green;
+      }
+    }
+    .text-decoration-style-container {
+      display: flex;
+      gap: 0.5em;
+      .decoration-button {
+        font-size: 1.2em;
+      }
+      .text-decoration-active {
+        fill: green;
+        stroke: green;
+        stroke-width: 1;
+      }
+    }
+  }
+}
+
+//----------------------------------------------Font Family----------------------------------------------
+
+.font-family-container {
+  height: 5vh;
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 1em;
+  margin-left: 1em;
+  select {
+    min-width: 10em;
+    height: 2em;
+    border: none;
+    outline: none;
+    background-color: #103163;
+    color: var(--text-color);
+    border: solid black 2px;
+    &:focus {
+      background-color: #1e4f99;
+      outline: none;
+    }
+  }
+}

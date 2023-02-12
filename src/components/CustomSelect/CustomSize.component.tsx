@@ -1,4 +1,5 @@
 import {useState} from "react"
+import "./CustomBorder.style.scss"
 
 export default function CustomSize({currentElement, changeStyle}){
 

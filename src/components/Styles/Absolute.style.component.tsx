@@ -8,15 +8,14 @@ export default function Position({object, changeStyle, resetStyle}){
 
 
     function changeHandler(e: any){
-        if(e.target.checked){
-            changeStyle("position", "absolute"); 
-            setChecked(true);
-
-        }else{
-            resetStyle("position")
-            setChecked(false)
+        changeStyle("position", e.target.value);
+        if(e.target.value === "absolute"){
+            changeStyle("top", "0", "vh", true);
+            changeStyle("left", "0", "vw", true);
         }
     }
+
+
 
     return(
         <div className="position-container">
@@ -25,15 +24,13 @@ export default function Position({object, changeStyle, resetStyle}){
                 id="position" 
                 name="position" 
                 value={object["position"] ? object["position"] : "static"} 
-                onChange={(e) => changeStyle("position", 
-                    e.target.value)}>
+                onChange={(e) => changeHandler(e)}>
                 <option value="static">static</option>
                 <option value="relative">relative</option>
                 <option value="absolute">absolute</option>
                 <option value="fixed">fixed</option>
                 <option value="sticky">sticky</option>
             </select>
-            <div>Position absolute/fixed/sticky needed</div>
                 <div className="absolute-options">
                     <div className="absolute-left-options">
                         <label htmlFor="left">X-Axis: </label>
@@ -43,19 +40,19 @@ export default function Position({object, changeStyle, resetStyle}){
                             type="range" 
                             value={object["left"] ? object["left"][0] : "0"} 
                             onChange={(e) => changeStyle("left", `${e.target.value}`, 
-                                document.querySelector("#left-unit-dropdown").value, true)} />
+                                document.querySelector("#left-unit-dropdown")?.value, true)} />
                         <input 
                             id="left" 
                             name="left" 
                             type="number" 
                             value={object["left"] ? object["left"][0] : "0"} 
                             onChange={(e) => changeStyle("left", `${e.target.value}`, 
-                                document.querySelector("#left-unit-dropdown").value, true)} />
+                                document.querySelector("#left-unit-dropdown")?.value, true)} />
                         <select 
                             name="left" 
                             id="left-unit-dropdown" 
                             value={object["left"] ? object["left"][1] : "vw"} 
-                            onChange={(e) => changeStyle("left", `${document.querySelector("#left").value}`, 
+                            onChange={(e) => changeStyle("left", `${document.querySelector("#left")?.value}`, 
                                 e.target.value, true)}>
                             <option value="px">px</option>
                             <option value="pt">pt</option>
@@ -74,19 +71,19 @@ export default function Position({object, changeStyle, resetStyle}){
                             type="range" 
                             value={object["top"] ? object["top"][0] : "0"} 
                             onChange={(e) => changeStyle("top", `${e.target.value}`, 
-                                document.querySelector("#top-unit-dropdown").value, true)} />
+                                document.querySelector("#top-unit-dropdown")?.value, true)} />
                         <input 
                             id="top" 
                             name="top" 
                             type="number" 
                             value={object["top"] ? object["top"][0] : "0"} 
                             onChange={(e) => changeStyle("top", `${e.target.value}`, 
-                                document.querySelector("#top-unit-dropdown").value, true)} />
+                                document.querySelector("#top-unit-dropdown")?.value, true)} />
                         <select 
                             name="top" 
                             id="top-unit-dropdown" 
                             value={object["top"] ? object["top"][1] : "vh"} 
-                            onChange={(e) => changeStyle("top", `${document.querySelector("#top").value}`, 
+                            onChange={(e) => changeStyle("top", `${document.querySelector("#top")?.value}`, 
                                 e.target.value, true)}>
                             <option value="px">px</option>
                             <option value="pt">pt</option>

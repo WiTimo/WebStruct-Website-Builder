@@ -1,0 +1,247 @@
+.custom-border {
+  border: solid lightblue 2px;
+  position: absolute;
+  z-index: 900;
+  pointer-events: none;
+  opacity: 0;
+  .custom-border-relative {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    pointer-events: none;
+    .custom-border-dot {
+      height: 1.4em;
+      aspect-ratio: 1/1;
+      background-color: lightblue;
+      position: absolute;
+      pointer-events: all;
+    }
+    .custom-border-top-dot {
+      left: 50%;
+      transform: translateX(-50%);
+      top: -1.4rem;
+      border-top-right-radius: 100%;
+      border-top-left-radius: 100%;
+    }
+    .custom-border-bottom-dot {
+      left: 50%;
+      bottom: -1.4em;
+      transform: translateX(-50%);
+      border-bottom-right-radius: 100%;
+      border-bottom-left-radius: 100%;
+    }
+    .custom-border-left-dot {
+      top: 50%;
+      transform: translateY(-50%);
+      left: -1.4em;
+      border-bottom-left-radius: 100%;
+      border-top-left-radius: 100%;
+    }
+    .custom-border-right-dot {
+      top: 50%;
+      right: -1.4em;
+      transform: translateY(-50%);
+      border-top-right-radius: 100%;
+      border-bottom-right-radius: 100%;
+    }
+    .custom-border-inner-dot {
+      height: 0.7em;
+    }
+    .custom-border-top-inner-dot {
+      top: 0em;
+      left: 50%;
+      transform: translateX(-50%);
+      border-bottom-right-radius: 100%;
+      border-bottom-left-radius: 100%;
+      border-top-right-radius: 0;
+      border-top-left-radius: 0;
+    }
+    .custom-border-bottom-inner-dot {
+      bottom: 0em;
+      left: 50%;
+      transform: translateX(-50%);
+      border-top-right-radius: 100%;
+      border-top-left-radius: 100%;
+      border-bottom-right-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+
+    .custom-border-right-inner-dot {
+      right: 0em;
+      top: 50%;
+      transform: translateY(-50%);
+      border-top-left-radius: 100%;
+      border-bottom-left-radius: 100%;
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+
+    .custom-border-left-inner-dot {
+      left: 0em;
+      top: 50%;
+      transform: translateY(-50%);
+      border-top-right-radius: 100%;
+      border-bottom-right-radius: 100%;
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+
+    //margin
+
+    .custom-margin-dot {
+      background-color: orange;
+      height: 0.7em;
+      width: 0.7em;
+    }
+    .margin-border-top-dot {
+      top: -0.7em;
+      left: 30%;
+      border-top-right-radius: 100%;
+      border-top-left-radius: 100%;
+      border-bottom-right-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+    .margin-border-bottom-dot {
+      bottom: -0.7em;
+      left: 30%;
+      border-bottom-right-radius: 100%;
+      border-bottom-left-radius: 100%;
+      border-top-right-radius: 0;
+      border-top-left-radius: 0;
+    }
+    .margin-border-left-dot {
+      left: -0.7em;
+      top: 30%;
+      border-bottom-left-radius: 100%;
+      border-top-left-radius: 100%;
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+    .margin-border-right-dot {
+      right: -0.7em;
+      top: 30%;
+      border-top-right-radius: 100%;
+      border-bottom-right-radius: 100%;
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+    .margin-border-top-inner-dot {
+      top: 0em;
+      left: 30%;
+      border-bottom-right-radius: 100%;
+      border-bottom-left-radius: 100%;
+      border-top-right-radius: 0;
+      border-top-left-radius: 0;
+    }
+    .margin-border-bottom-inner-dot {
+      bottom: 0em;
+      left: 30%;
+      border-top-right-radius: 100%;
+      border-top-left-radius: 100%;
+      border-bottom-right-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+    .margin-border-left-inner-dot {
+      left: 0em;
+      top: 30%;
+      border-top-right-radius: 100%;
+      border-bottom-right-radius: 100%;
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+    .margin-border-right-inner-dot {
+      right: 0em;
+      top: 30%;
+      border-top-left-radius: 100%;
+      border-bottom-left-radius: 100%;
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+    //padding
+
+    .custom-padding-dot {
+      background-color: green;
+      height: 0.7em;
+      width: 0.7em;
+    }
+
+    .padding-border-top-dot {
+      top: -0.7em;
+      left: 70%;
+      border-top-right-radius: 100%;
+      border-top-left-radius: 100%;
+      border-bottom-right-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+    .padding-border-bottom-dot {
+      bottom: -0.7em;
+      left: 70%;
+      border-bottom-right-radius: 100%;
+      border-bottom-left-radius: 100%;
+      border-top-right-radius: 0;
+      border-top-left-radius: 0;
+    }
+    .padding-border-left-dot {
+      left: -0.7em;
+      top: 70%;
+      border-bottom-left-radius: 100%;
+      border-top-left-radius: 100%;
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+    .padding-border-right-dot {
+      right: -0.7em;
+      top: 70%;
+      border-top-right-radius: 100%;
+      border-bottom-right-radius: 100%;
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+    .padding-border-top-inner-dot {
+      top: 0em;
+      left: 70%;
+      border-bottom-right-radius: 100%;
+      border-bottom-left-radius: 100%;
+      border-top-right-radius: 0;
+      border-top-left-radius: 0;
+    }
+    .padding-border-bottom-inner-dot {
+      bottom: 0em;
+      left: 70%;
+      border-top-right-radius: 100%;
+      border-top-left-radius: 100%;
+      border-bottom-right-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+    .padding-border-left-inner-dot {
+      left: 0em;
+      top: 70%;
+      border-top-right-radius: 100%;
+      border-bottom-right-radius: 100%;
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+    .padding-border-right-inner-dot {
+      right: 0em;
+      top: 70%;
+      border-top-left-radius: 100%;
+      border-bottom-left-radius: 100%;
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+    .custom-border-margin-marker {
+      background: rgba($color: orange, $alpha: 0.5);
+      height: 0;
+      width: 0;
+      opacity: 0;
+      position: absolute;
+    }
+    .custom-border-padding-marker {
+      background: rgba($color: green, $alpha: 0.5);
+      height: 0;
+      width: 0;
+      opacity: 0;
+      position: absolute;
+    }
+  }
+}

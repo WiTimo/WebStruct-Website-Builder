@@ -3,8 +3,9 @@
 export default function Text({text, changeText }){
     return(
         <div className="text-container">
-            <label htmlFor="id-input">Text: </label>
-            <input 
+            <textarea 
+                rows={4}
+                cols={25}
                 className="style-input" 
                 id="id-input" 
                 name="id-input" 

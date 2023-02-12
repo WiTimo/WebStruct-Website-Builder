@@ -1,6 +1,7 @@
  import { useEffect, useState } from "react";
 import Headline from "../Elements/Headline/Headline.element";
 import Pharagraph from "../Elements/Paragraph/Pharagraph.element";
+import "../Styles/GeneralStyleComponents.style.scss"
  
  export default function ElementHub({index, element, object, changeStyle, resetStyle, changeText, makeBorderBoxInvisible}) {
 

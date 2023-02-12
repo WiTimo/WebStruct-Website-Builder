@@ -9,11 +9,12 @@ import Border from "../Sections/Border.component";
 interface DefaultDomElement{
     style: string,
 }
+
 export default function Editor() {
 
     //default html and style, for the beginning
     const defaultHtml = ["<html>", ["<head>", ["<style>", "", "</style>"], "</head>"], ["<body>", [], "</body>"], "</html>"];
-    const defaultStyle = ["*", ["margin: 0;", "padding: 0;", "box-sizing: border-box;", "overflow-x: hidden;"], "body", ["background-color: white;"]]
+    const defaultStyle = ["*", ["margin: 0;", "padding: 0;", "box-sizing: border-box;", "overflow-x: hidden;", "z-index: 100;"], "body", ["background-color: white;"]]
 
     const [html, setHtml] = useState<string[][][]>(defaultHtml);
     const [style, setStyle] = useState(defaultStyle);

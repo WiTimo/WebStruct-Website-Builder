@@ -1,10 +1,15 @@
 import Draggable from "react-draggable";
 import ElementSelector from "../ElementSelector/ElementSelector.component";
+import "./Section.style.scss"
+import {FaArrowCircleDown, FaArrowCircleUp} from "react-icons/fa"
+import {MdDelete, MdDragHandle} from "react-icons/md"
+import {HiOutlineDocumentDownload} from "react-icons/hi"
 
 
 
 export default function Section_1({elements, setCurrentElement, setElements, html, setHtml, style, setStyle, elementsLength, currentElement, makeBorderBoxInvisible}){
 
+    const defaultStyles_Headline = {"text": "Headline", "font-weight": "bold"}
 
     //adding Elements to the Dom
     const addH1 = (content: string, position: number[]) => {
@@ -12,7 +17,7 @@ export default function Section_1({elements, setCurrentElement, setElements, htm
         const HTMLPosition = newHTML[position[0]][position[1]];
         HTMLPosition.push([`<h1 id="_${HTMLPosition.length}" class="element ${HTMLPosition.length}">`, content, `</h1>`]);
         setStyle([...style, `#_${HTMLPosition.length - 1}`, []])
-        setElements([...elements, ["Headline", HTMLPosition.length - 1, { "text": "Headline" }]])
+        setElements([...elements, ["Headline", HTMLPosition.length - 1, defaultStyles_Headline]])
         elementsLength.current += 1;
         setHtml(newHTML);
     }
@@ -60,7 +65,6 @@ export default function Section_1({elements, setCurrentElement, setElements, htm
     }
 
     function moveCurrentElement(direction: string) {
-        debugger;
         const currentIdx: number = currentElement[1];
         let index: number = 0;
         if (direction === "up") {
@@ -119,25 +123,49 @@ export default function Section_1({elements, setCurrentElement, setElements, htm
         }
     })
 
+    const addElement = () => {
+        const select = document.getElementById("adding-elements-select") as HTMLSelectElement;
+        switch(select.value){
+            case "h1": addH1("Headline", [2, 1]); break;
+            case "p": addP("Text", [2, 1]); break;
+        }
+    }
+
     return(
-        <Draggable>
+        <Draggable handle=".dragable-object-section-1">
             <div className="section-1">
-                <div className="dragable-object dragable-object-section-1"></div>
-                <button className="add-button addH1" 
-                    onClick={() => addH1("Headline", [2, 1])}>Add Headline</button>
-                <button className="add-button addP" 
-                    onClick={() => addP("Text", [2, 1])}>Add Text</button>
+                <div className="dragable-object dragable-object-section-1">
+                    <MdDragHandle className="dragable-object-icon" />
+                </div>
+                <div className="adding-elements-container">
+                    <select id="adding-elements-select">
+                        <option value="h1">{`Headline <h1>`}</option>
+                        <option value="p">{`Text <p>`}</option>
+                    </select>
+                    <button className="adding-elements-button" onClick={addElement}>ADD</button>
+                </div>
+                <div className="section-1-elements-display">
                 <ElementSelector 
                     elements={elements} 
-                    setCurrentElement={setCurrentElement} />
-                <button className="delete-element-button" 
-                    onClick={() => deleteCurrentElement()}>Delete Current Element</button>
-                <button className="move-element-button move-element-button-up" 
-                    onClick={() => moveCurrentElement("up")}>Move Current Element UP</button>
-                <button className="move-element-button move-element-button-down" 
-                    onClick={() => moveCurrentElement("down")}>Move Current Element DOWN</button>
-                <button className="download-html" 
-                    onClick={ () => handleDownload()}>Download HTML File</button>
+                    setCurrentElement={setCurrentElement} 
+                    currentElement={currentElement}
+                    />
+                </div>
+                <div className="section-1-actions-container">
+                    <div className="section-1-actions">
+                    <FaArrowCircleUp className="section-1-action-icon move-element-button move-element-button-up" 
+                        onClick={() => moveCurrentElement("up")} />
+                    <MdDelete className="section-1-action-icon delete-element-button" 
+                        onClick={() => deleteCurrentElement()} />
+                    <FaArrowCircleDown className="section-1-action-icon move-element-button move-element-button-down" 
+                        onClick={() => moveCurrentElement("down")} />
+                    </div>
+                    <div className="download-html-container">
+                        <HiOutlineDocumentDownload className="section-1-action-icon download-html" 
+                            onClick={ () => handleDownload()}/>
+                    </div>
+                    
+                </div>
             </div>
         </Draggable>
     )
