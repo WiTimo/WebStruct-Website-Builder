@@ -1,5 +1,5 @@
 import Draggable from "react-draggable";
-import ElementSelector from "../ElementSelector/ElementSelector.component";
+import ElementSelector from "../Elements/ElementSelector.component";
 import "./Section.style.scss"
 import {FaArrowCircleDown, FaArrowCircleUp} from "react-icons/fa"
 import {MdDelete, MdDragHandle} from "react-icons/md"
@@ -9,7 +9,7 @@ import {HiOutlineDocumentDownload} from "react-icons/hi"
 
 export default function Section_1({elements, setCurrentElement, setElements, html, setHtml, style, setStyle, elementsLength, currentElement, makeBorderBoxInvisible}){
 
-    const defaultStyles_Headline = {"text": "Headline", "font-weight": "bold"}
+    const defaultStyles_Headline = {"text": "Sample Text", "font-weight": "bold"}
 
     //adding Elements to the Dom
     const addH1 = (content: string, position: number[]) => {
@@ -26,7 +26,54 @@ export default function Section_1({elements, setCurrentElement, setElements, htm
         const HTMLPosition = newHTML[position[0]][position[1]];
         HTMLPosition.push([`<p id="_${HTMLPosition.length}" class="element ${HTMLPosition.length}">`, content, `</p>`]);
         setStyle([...style, `#_${HTMLPosition.length - 1}`, []])
-        setElements([...elements, ["Paragraph", HTMLPosition.length - 1, { "text": "Paragraph" }]])
+        setElements([...elements, ["Paragraph", HTMLPosition.length - 1, { "text": "Sample Text" }]])
+        elementsLength.current += 1;
+        setHtml(newHTML);
+    }
+
+    const addDiv = (content: string, position: number[]) => {
+        const newHTML = [...html];
+        const HTMLPosition = newHTML[position[0]][position[1]];
+        HTMLPosition.push([`<div id="_${HTMLPosition.length}" class="element ${HTMLPosition.length}">`, content, `</div>`]);
+        setStyle([...style, `#_${HTMLPosition.length - 1}`, []])
+        setElements([...elements, ["Empty", HTMLPosition.length - 1, {"text" : ""}]])
+        elementsLength.current += 1;
+        setHtml(newHTML);
+    }
+
+    const addSpan = (content: string, position: number[]) => {
+        const newHTML = [...html];
+        const HTMLPosition = newHTML[position[0]][position[1]];
+        HTMLPosition.push([`<span id="_${HTMLPosition.length}" class="element ${HTMLPosition.length}">`, content, `</span>`]);
+        setStyle([...style, `#_${HTMLPosition.length - 1}`, []])
+        setElements([...elements, ["Span", HTMLPosition.length - 1, {"text" : "Sample Text"}]])
+        elementsLength.current += 1;
+        setHtml(newHTML);
+    }
+    const addHeader = (content: string, position: number[]) => {
+        const newHTML = [...html];
+        const HTMLPosition = newHTML[position[0]][position[1]];
+        HTMLPosition.push([`<header id="_${HTMLPosition.length}" class="element ${HTMLPosition.length}">`, content, `</header>`]);
+        setStyle([...style, `#_${HTMLPosition.length - 1}`, []])
+        setElements([...elements, ["Header", HTMLPosition.length - 1, {"text" : "Sample Text"}]])
+        elementsLength.current += 1;
+        setHtml(newHTML);
+    }
+    const addMain = (content: string, position: number[]) => {
+        const newHTML = [...html];
+        const HTMLPosition = newHTML[position[0]][position[1]];
+        HTMLPosition.push([`<main id="_${HTMLPosition.length}" class="element ${HTMLPosition.length}">`, content, `</main>`]);
+        setStyle([...style, `#_${HTMLPosition.length - 1}`, []])
+        setElements([...elements, ["Main", HTMLPosition.length - 1, {"text" : "Sample Text"}]])
+        elementsLength.current += 1;
+        setHtml(newHTML);
+    }
+    const addFooter = (content: string, position: number[]) => {
+        const newHTML = [...html];
+        const HTMLPosition = newHTML[position[0]][position[1]];
+        HTMLPosition.push([`<footer id="_${HTMLPosition.length}" class="element ${HTMLPosition.length}">`, content, `</footer>`]);
+        setStyle([...style, `#_${HTMLPosition.length - 1}`, []])
+        setElements([...elements, ["Footer", HTMLPosition.length - 1, {"text" : "Sample Text"}]])
         elementsLength.current += 1;
         setHtml(newHTML);
     }
@@ -56,7 +103,7 @@ export default function Section_1({elements, setCurrentElement, setElements, htm
         setHtml(newHTML);
         setElements(newElements);
         if (newElements.length !== 0) {
-            setCurrentElement(newElements[newElements.length - 1]);
+            newElements[currentIdx + 1] ? setCurrentElement(newElements[currentIdx + 1]) : setCurrentElement(newElements[newElements.length - 1]);
         } else {
             setCurrentElement(["none", 0, {}])
         }
@@ -126,8 +173,13 @@ export default function Section_1({elements, setCurrentElement, setElements, htm
     const addElement = () => {
         const select = document.getElementById("adding-elements-select") as HTMLSelectElement;
         switch(select.value){
-            case "h1": addH1("Headline", [2, 1]); break;
-            case "p": addP("Text", [2, 1]); break;
+            case "h1": addH1("Sample Text", [2, 1]); break;
+            case "p": addP("Sample Text", [2, 1]); break;
+            case "div": addDiv("", [2, 1]); break;
+            case "span" : addSpan("Sample Text", [2, 1]); break;
+            case "header": addHeader("Sample Text", [2, 1]); break;
+            case "main": addMain("Sample Text", [2, 1]); break;
+            case "footer": addFooter("Sample Text", [2, 1]); break;
         }
     }
 
@@ -141,6 +193,11 @@ export default function Section_1({elements, setCurrentElement, setElements, htm
                     <select id="adding-elements-select">
                         <option value="h1">{`Headline <h1>`}</option>
                         <option value="p">{`Text <p>`}</option>
+                        <option value="div">{`Empty <div>`}</option>
+                        <option value="span">{`Span <span>`}</option>
+                        <option value="header">{`Header <header>`}</option>
+                        <option value="main">{`Main <main>`}</option>
+                        <option value="footer">{`Footer <footer>`}</option>
                     </select>
                     <button className="adding-elements-button" onClick={addElement}>ADD</button>
                 </div>

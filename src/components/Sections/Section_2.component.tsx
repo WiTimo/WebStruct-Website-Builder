@@ -1,5 +1,5 @@
 import Draggable from "react-draggable"
-import ElementHub from "../ElementHub/ElementHub.component"
+import ElementHub from "../Elements/ElementHub.component"
 import {MdDragHandle} from "react-icons/md"
 
 export default function Section_2({element, index, object, changeStyle, resetStyle, changeText, makeBorderBoxInvisible}){

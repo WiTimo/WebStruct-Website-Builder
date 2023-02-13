@@ -3,10 +3,11 @@
 export default function FontFamily({object, changeStyle}){
     return(
         <div className="font-family-container">
-            <label htmlFor="font-family-dropdown">Font-Style: </label>
+            <label htmlFor="font-family-dropdown">Font-Family: </label>
             <select 
                 name="font-family" 
                 id="font-family-dropdown" 
+                className="std-dropdown"
                 value={object["font-family"] ? object["font-family"] : "Times New Roman"} 
                 onChange={(e) => changeStyle("font-family", 
                     e.target.value)}>

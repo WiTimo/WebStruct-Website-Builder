@@ -24,28 +24,34 @@ export default function Filter({object, changeStyle, resetStyle}){
     return(
         <div className="filter-container">
             <div className="filter">
-                <label className="filter-label" htmlFor="filter">Filter: </label>
-                <select className="filter-select" 
-                    id="filter" 
-                    onChange={(e) => changeFilter(e.target.value)}>
-                    <option value="none">None</option>
-                    <option value="blur">Blur</option>
-                    <option value="brightness">Brightness</option>
-                    <option value="contrast">Contrast</option>
-                    <option value="grayscale">Grayscale</option>
-                    <option value="hue-rotate">Hue-rotate</option>
-                    <option value="invert">Invert</option>
-                    <option value="opacity">Opacity</option>
-                    <option value="saturate">Saturate</option>
-                    <option value="sepia">Sepia</option>
-                </select>
-                <label className="filter-value-label" htmlFor="filter-value">Value: </label>
-                <input className="filter-value-input" 
-                    id="filter-value" 
-                    type="number" 
-                    onChange={(e) => changeFilterValue(e.target.value)} />
+                <div className="filter-select">
+                    <label className="filter-label" htmlFor="filter">Filter: </label>
+                    <select className="std-dropdown filter-select-dropdown" 
+                        id="filter" 
+                        onChange={(e) => changeFilter(e.target.value)}>
+                            <option value="none">None</option>
+                            <option value="blur">Blur</option>
+                            <option value="brightness">Brightness</option>
+                            <option value="contrast">Contrast</option>
+                            <option value="grayscale">Grayscale</option>
+                            <option value="hue-rotate">Hue-rotate</option>
+                            <option value="invert">Invert</option>
+                            <option value="opacity">Opacity</option>
+                            <option value="saturate">Saturate</option>
+                            <option value="sepia">Sepia</option>
+                    </select>
+                </div>
+                <div className="filter-input">
+                    <label className="filter-value-label" htmlFor="filter-value">Value: </label>
+                    <input className="std-input filter-value-input" 
+                        id="filter-value" 
+                        type="number" 
+                        onChange={(e) => changeFilterValue(e.target.value)} />
+                </div>
             </div>
-            <button className="filter-reset" onClick={resetFilter}>Reset</button>
+            <div className="filter-reset-button-container">
+                <button className="std-button filter-reset" onClick={resetFilter}>Reset</button>
+            </div>
         </div>
     )
 }

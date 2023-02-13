@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import "./ElementSelector.styles.scss";
+import "./Elements.style.scss";
 
 export default function ElementSelector({setCurrentElement, elements, currentElement}) {
 

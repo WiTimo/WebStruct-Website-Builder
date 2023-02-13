@@ -36,15 +36,27 @@ export default function CustomProperty({object, changeStyle, resetStyle}){
     return(
         <div className="custom-property-container">
             <div className="custom-property-cont-both custom-property-cont-1">
-                <label className="custom-property-label" htmlFor="custom-property">Property: </label>
-                <input className="std-input custom-property-input" id="custom-property" />
+                <label 
+                    className="custom-property-label" 
+                    htmlFor="custom-property">Property: </label>
+                <input 
+                    className="std-input custom-property-input" 
+                    id="custom-property"
+                    />
             </div>
             <div className="custom-property-cont-both custom-propterty-cont-2">
-                <label className="custom-property-value-label" htmlFor="custom-property-value">Value: </label>
-                <input className="std-input custom-property-value-input" id="custom-property-value" />
+                <label 
+                    className="custom-property-value-label" 
+                    htmlFor="custom-property-value">Value: </label>
+                <input 
+                    className="std-input custom-property-value-input" 
+                    id="custom-property-value" />
             </div>
-            <div className="custom-property-button-container">
-                <button className="std-button custom-property-submit-button" onClick={addCustomProperty}>Submit</button>
+            <div 
+            className="custom-property-button-container">
+                <button 
+                className="std-button custom-property-submit-button" 
+                onClick={addCustomProperty}>Submit</button>
             </div>
             <div className="custom-property-display-container">
                 {object["customPropertys"] ? 

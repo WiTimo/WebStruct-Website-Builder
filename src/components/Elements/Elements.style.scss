@@ -1,3 +1,29 @@
+.no-element-selected-container {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  p {
+    font-size: 3em;
+    text-align: center;
+    transform: translateY(-1.5em);
+    animation: noElemAnim 2s ease-in-out infinite;
+  }
+}
+
+@keyframes noElemAnim {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
 .elements-container {
   width: 100%;
   height: 100vh;
@@ -41,4 +67,35 @@
 .style-container {
   overflow-x: hidden;
   overflow-y: auto;
+}
+
+.selector-element {
+  overflow: auto;
+  white-space: nowrap;
+  margin: 4px;
+  margin-left: 15px;
+  padding: 5px;
+  display: inline-block;
+  background-color: #103163;
+  border-radius: 5px;
+  font-size: 1.3em;
+  width: fit-content;
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.active-selector-element {
+  border-right: solid lightgreen 5px;
+}
+
+@media only screen and (min-width: 2000px) {
+  .selector-element {
+    font-size: 1.1em;
+    margin-top: 7px;
+    height: 3vh;
+  }
+  option {
+    font-size: 0.5em;
+  }
 }
