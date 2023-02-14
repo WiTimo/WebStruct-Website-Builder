@@ -4,6 +4,7 @@ import "./Editor.styles.scss";
 import Section_1 from "../Sections/Section_1.component";
 import Section_2 from "../Sections/Section_2.component";
 import Border from "../Sections/Border.component";
+import MobileSections from "../Sections/MobileSections.component";
 
 
 interface DefaultDomElement{
@@ -25,6 +26,7 @@ export default function Editor() {
     const [currentX, setCurrentX] = useState(0);
     const [currentY, setCurrentY] = useState(0);
     const elementsLength = useRef(0);
+    const [mobile, setMobile] = useState(false);
 
 
     //create string from array
@@ -213,36 +215,71 @@ export default function Editor() {
     }
 
 
-    
+    useEffect(() => {
+        window.addEventListener("resize", () => {
+            if(window.innerWidth < 650){
+                setMobile(true);
+            }else{
+                setMobile(false);
+            }
+        })
+        if(window.innerWidth < 650){
+            setMobile(true);
+        }
+    },[])
 
     return (
         <div className="editor-container">
+        <iframe className="website-showcase-iframe" sandbox="allow-same-origin allow-scripts" frameBorder="0" />
+            {!mobile ? 
+            <>
             <Section_1 
-                elements={elements} 
-                setCurrentElement={setCurrentElement} 
-                setElements={setElements} 
-                html={html} 
-                setHtml={setHtml} 
-                style={style} 
-                setStyle={setStyle} 
-                elementsLength={elementsLength} 
-                currentElement={currentElement} 
-                makeBorderBoxInvisible={makeBorderBoxInvisible}
-            />
-            <Border 
-                currentElement={currentElement} 
-                changeStyle={changeStyle}
-            />
-            <iframe className="website-showcase-iframe" sandbox="allow-same-origin allow-scripts" frameBorder="0" />
-            <Section_2
-                element={currentElement[0]} 
-                index={currentElement[1]} 
-                object={currentElement[2]} 
-                changeStyle={changeStyle} 
-                resetStyle={resetStyle} 
-                changeText={changeText} 
-                makeBorderBoxInvisible={makeBorderBoxInvisible}
-            />
+            elements={elements} 
+            setCurrentElement={setCurrentElement} 
+            setElements={setElements} 
+            html={html} 
+            setHtml={setHtml} 
+            style={style} 
+            setStyle={setStyle} 
+            elementsLength={elementsLength} 
+            currentElement={currentElement} 
+            makeBorderBoxInvisible={makeBorderBoxInvisible}
+        />
+        <Border 
+            currentElement={currentElement} 
+            changeStyle={changeStyle}
+        />
+        <Section_2
+            element={currentElement[0]} 
+            index={currentElement[1]} 
+            object={currentElement[2]} 
+            changeStyle={changeStyle} 
+            resetStyle={resetStyle} 
+            changeText={changeText} 
+            makeBorderBoxInvisible={makeBorderBoxInvisible}
+        />
+        </>
+        : 
+        <MobileSections 
+        elements={elements} 
+        setCurrentElement={setCurrentElement} 
+        setElements={setElements} 
+        html={html} 
+        setHtml={setHtml} 
+        style={style} 
+        setStyle={setStyle} 
+        elementsLength={elementsLength} 
+        currentElement={currentElement} 
+        makeBorderBoxInvisible={makeBorderBoxInvisible}
+        index={currentElement[1]}
+        object={currentElement[2]}
+        changeStyle={changeStyle}
+        resetStyle={resetStyle}
+        changeText={changeText}
+        element={currentElement[0]}
+        />
+        }
+            
         </div>
     )
 }
