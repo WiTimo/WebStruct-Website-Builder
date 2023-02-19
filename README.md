@@ -22,6 +22,9 @@ I earned a lot of knowledge in ReactJS and Javascript, for example advanced Reac
 ![image](https://user-images.githubusercontent.com/118105998/219955308-01b981cf-aebe-4105-add9-6304e2b12707.png)
 ![image](https://user-images.githubusercontent.com/118105998/219955322-c1746570-3563-4b84-a762-bab153e52f53.png)
 
+### In the Dom
+#### In the Dom you can change the width, height, padding, margin and Position of your element. Change the position by double clicking on the Element and then releasing it on the desired position. Keep in mind that the transform property will be overritten.
+
 ### HTML 
 
 In the section for HTML all currently avaiable Elements can be viewed and clicked.
@@ -71,8 +74,5 @@ This is the more complex part of the application. Here you can modify the styles
 
 #### Background-Image: Here you can change the background-image of your element. You can create Images by creating an empty Element and giving it a height and a width, as well as a background-image. You can choose from an url and your own Images which also can be applied for the final product
 ![image](https://user-images.githubusercontent.com/118105998/219956796-c3d92464-9850-45f7-801c-56316d96d758.png)
-
-### In the Dom
-#### In the Dom you can change the width, height, padding, margin and Position of your element. Change the position by double clicking on the Element and then releasing it on the desired position. Keep in mind that the transform property will be overritten.
 
 # Thank you for reading the Readme and having fun with my custom website builder sideproject
